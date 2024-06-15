@@ -1,7 +1,6 @@
 package net.bouncingelf10.bodar;
 
 import net.fabricmc.api.ModInitializer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +9,8 @@ public class BoDaR implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	@Override
-	public void onInitialize() {LOGGER.info("Hello Fabric world!");
+	public void onInitialize() {
+		LOGGER.info("Hello Fabric world!");
+		// If you have any other initialization logic, place it here.
 	}
 }
