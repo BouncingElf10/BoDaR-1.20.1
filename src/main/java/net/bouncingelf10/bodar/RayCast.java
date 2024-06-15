@@ -1,6 +1,7 @@
 package net.bouncingelf10.bodar;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -49,12 +50,22 @@ public class RayCast {
                     float hitZ = (float) hitVec.z;
 
                     LOGGER.info("Ray hit block at {}, {}, {}", hitX, hitY, hitZ);
-                    MinecraftClient.getInstance().player.sendMessage(Text.of("Ray hit block at " + hitX + " " + hitY + " " + hitZ));
+                    //MinecraftClient.getInstance().player.sendMessage(Text.of("Ray hit block at " + hitX + " " + hitY + " " + hitZ));
+                    spawnParticle(hitX, hitY, hitZ);
                 } else {
                     LOGGER.info("Ray did not hit any block within reach.");
-                    MinecraftClient.getInstance().player.sendMessage(Text.of("Ray did not hit any block within reach."));
+                    //MinecraftClient.getInstance().player.sendMessage(Text.of("Ray did not hit any block within reach."));
                 }
             }
+        }
+    }
+
+    static ClientWorld world = MinecraftClient.getInstance().world;
+
+    public static void spawnParticle(float hitX, float hitY, float hitZ) {
+        if (world != null) {
+            LOGGER.info("Spawning CustomParticle at ({}, {}, {}) with velocity ({}, {}, {})", hitX, hitY, hitZ, 0, 0, 0);
+            world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY, hitZ, 0, 0, 0);
         }
     }
 }

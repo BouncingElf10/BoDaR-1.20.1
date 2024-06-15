@@ -12,7 +12,7 @@ public class CustomParticle extends SpriteBillboardParticle {
     protected CustomParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
         super(world, x, y, z, velocityX, velocityY, velocityZ);
         this.scale = 0.2F;
-        this.maxAge = 100;
+        this.maxAge = 400;
         this.setVelocity(velocityX, velocityY, velocityZ);
     }
 
@@ -24,7 +24,15 @@ public class CustomParticle extends SpriteBillboardParticle {
     @Override
     public void tick() {
         super.tick();
-        this.alpha = (-(1/(float)maxAge) * age + 1);
+        //this.alpha = (-(1/(float)maxAge) * age + 1);
+        float lifespan = (float) (maxAge * 0.95);  // Calculate 5% of the maxAge
+        if (age >= lifespan) {
+            //LOGGER.info(String.valueOf(age));
+            this.alpha = 1 - ((age - lifespan) / (maxAge - lifespan));
+        } else {
+            this.alpha = 1;
+        }
+
     }
 
     public static class Factory implements ParticleFactory<DefaultParticleType> {
@@ -40,6 +48,7 @@ public class CustomParticle extends SpriteBillboardParticle {
             CustomParticle particle = new CustomParticle(world, x, y, z, velocityX, velocityY, velocityZ);
             LOGGER.info("Creating CustomParticle at ({}, {}, {}) with velocity ({}, {}, {})", x, y, z, velocityX, velocityY, velocityZ);
             particle.setSprite(this.spriteProvider);
+            //LOGGER.info("bruh please work"); (did in fact not work)
             return particle;
         }
     }
