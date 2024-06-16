@@ -12,6 +12,9 @@ import net.minecraft.world.RaycastContext;
 
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 
+
+import net.bouncingelf10.bodar.CustomParticle.*;
+
 public class RayCast {
     public static void rayCast(float offsetX, float offsetY) {
         // Get the Minecraft client instance
@@ -61,6 +64,7 @@ public class RayCast {
     }
 
     static ClientWorld world = MinecraftClient.getInstance().world;
+
 
     public static void spawnParticle(float hitX, float hitY, float hitZ) {
         if (world != null) {
