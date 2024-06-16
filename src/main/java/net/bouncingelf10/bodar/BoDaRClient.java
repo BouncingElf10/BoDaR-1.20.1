@@ -29,7 +29,7 @@ public class BoDaRClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (ModKeyBindings.exampleKeyBinding.wasPressed()) {
                 LOGGER.info("R pressed");
-                rayCast(0f, 0f);
+                rayCast(0f, 1f);
             }
         });
 

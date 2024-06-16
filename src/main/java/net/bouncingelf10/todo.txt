@@ -1,0 +1,11 @@
+Emmisive particles
+
+Particle should lock on blocks and not follow players
+
+More BoDaR modes
+
+particles away from you should delete
+
+toggleable black textures for blocks
+
+Nice settings menu
