@@ -36,15 +36,28 @@ public class CustomParticle extends SpriteBillboardParticle {
 
     private Quaternionf getRotationQuaternion(Direction direction) {
         switch (direction) {
-            case UP: new Quaternionf().rotateX((float) Math.toRadians(90)); LOGGER.info("UP"); break;
-            case DOWN: new Quaternionf().rotateX((float) Math.toRadians(-90)); LOGGER.info("DOWN"); break;
-            case NORTH: new Quaternionf().rotateY((float) Math.toRadians(0)); LOGGER.info("NORTH"); break;
-            case EAST: new Quaternionf().rotateY((float) Math.toRadians(-90)); LOGGER.info("EAST"); break;
-            case SOUTH: new Quaternionf().rotateY((float) Math.toRadians(180)); LOGGER.info("SOUTH"); break;
-            case WEST: new Quaternionf().rotateY((float) Math.toRadians(90)); LOGGER.info("WEST"); break;
-            default: LOGGER.warn("No valid direction");
-        };
-        return new Quaternionf().rotateY((float) Math.toRadians(90));
+            case UP:
+                LOGGER.info("UP");
+                return new Quaternionf().rotateX((float) Math.toRadians(90));
+            case DOWN:
+                LOGGER.info("DOWN");
+                return new Quaternionf().rotateX((float) Math.toRadians(-90));
+            case NORTH:
+                LOGGER.info("NORTH");
+                return new Quaternionf().rotateY((float) Math.toRadians(0));
+            case EAST:
+                LOGGER.info("EAST");
+                return new Quaternionf().rotateY((float) Math.toRadians(-90));
+            case SOUTH:
+                LOGGER.info("SOUTH");
+                return new Quaternionf().rotateY((float) Math.toRadians(180));
+            case WEST:
+                LOGGER.info("WEST");
+                return new Quaternionf().rotateY((float) Math.toRadians(90));
+            default:
+                LOGGER.warn("No valid direction");
+                return new Quaternionf();
+        }
     }
 
     @Override
@@ -100,14 +113,13 @@ public class CustomParticle extends SpriteBillboardParticle {
         }
 
         static Direction side;
-        public static void getDirection(Direction sideGot) {
+        public static void setDirection(Direction sideGot) {
             side = sideGot;
         }
 
         @Override
         public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
-            // Assuming the direction is passed here, for example purposes we use Direction.NORTH
-            Direction direction = side; // You can change this to any direction based on your needs
+            Direction direction = side; // Use the stored direction
             CustomParticle particle = new CustomParticle(world, x, y, z, velocityX, velocityY, velocityZ, direction);
             LOGGER.info("Creating CustomParticle at ({}, {}, {}) with velocity ({}, {}, {}) and direction ({})", x, y, z, velocityX, velocityY, velocityZ, side);
             particle.setSprite(this.spriteProvider);
