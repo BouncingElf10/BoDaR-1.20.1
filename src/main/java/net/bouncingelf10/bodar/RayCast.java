@@ -11,7 +11,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
-import static net.bouncingelf10.bodar.CustomParticle.getDirection;
+import static net.bouncingelf10.bodar.CustomParticle.Factory.getDirection;
 
 
 import net.bouncingelf10.bodar.CustomParticle.*;
@@ -54,8 +54,8 @@ public class RayCast {
                     float hitZ = (float) hitVec.z;
 
                     LOGGER.info("Ray hit block at {}, {}, {}", hitX, hitY, hitZ);
-                    //MinecraftClient.getInstance().player.sendMessage(Text.of("Ray hit block at " + hitX + " " + hitY + " " + hitZ));
                     getDirection(result.getSide());
+                    //MinecraftClient.getInstance().player.sendMessage(Text.of("Ray hit block at " + hitX + " " + hitY + " " + hitZ));
                     spawnParticle(hitX, hitY, hitZ);
                 } else {
                     LOGGER.info("Ray did not hit any block within reach.");

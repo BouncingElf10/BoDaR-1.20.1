@@ -11,16 +11,18 @@ import net.minecraft.util.math.Vec3d;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 
 public class CustomParticle extends SpriteBillboardParticle {
 
-    protected CustomParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
+    private final Quaternionf rotation;
+
+    protected CustomParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Direction direction) {
         super(world, x, y, z, velocityX, velocityY, velocityZ);
         this.scale = 0.2F;
         this.maxAge = 400;
         this.setVelocity(velocityX, velocityY, velocityZ);
+        this.rotation = getRotationQuaternion(direction);
     }
 
     private float getScale(float tickDelta) {
@@ -32,26 +34,17 @@ public class CustomParticle extends SpriteBillboardParticle {
         return ParticleTextureSheet.PARTICLE_SHEET_TRANSLUCENT;
     }
 
-    static Quaternionf rotation;
-
-    public static void getDirection(Direction direction) {
-        //LOGGER.info("getDirection: {}", String.valueOf(direction));
+    private Quaternionf getRotationQuaternion(Direction direction) {
         switch (direction) {
-                case UP:
-                    rotation = new Quaternionf().rotateX((float) Math.toRadians(90)); /*LOGGER.info("SWITCHING TO UP");*/ break;
-                case DOWN:
-                    rotation = new Quaternionf().rotateX((float) Math.toRadians(-90)); /*LOGGER.info("SWITCHING TO DOWN");*/ break;
-                case NORTH:
-                    rotation = new Quaternionf().rotateY((float) Math.toRadians(0)); /*LOGGER.info("SWITCHING TO NORTH");*/ break;
-                case EAST:
-                    rotation = new Quaternionf().rotateY((float) Math.toRadians(-90)); /*LOGGER.info("SWITCHING TO EAST");*/ break;
-                case SOUTH:
-                    rotation = new Quaternionf().rotateY((float) Math.toRadians(180)); /*LOGGER.info("SWITCHING TO SOUTH");*/ break;
-                case WEST:
-                    rotation = new Quaternionf().rotateY((float) Math.toRadians(90)); /*LOGGER.info("SWITCHING TO WEST");*/ break;
-                default: LOGGER.warn("No valid direction");break;
-        }
-        //LOGGER.info("Quaternionf rotation: {}", rotation);
+            case UP: new Quaternionf().rotateX((float) Math.toRadians(90)); LOGGER.info("UP"); break;
+            case DOWN: new Quaternionf().rotateX((float) Math.toRadians(-90)); LOGGER.info("DOWN"); break;
+            case NORTH: new Quaternionf().rotateY((float) Math.toRadians(0)); LOGGER.info("NORTH"); break;
+            case EAST: new Quaternionf().rotateY((float) Math.toRadians(-90)); LOGGER.info("EAST"); break;
+            case SOUTH: new Quaternionf().rotateY((float) Math.toRadians(180)); LOGGER.info("SOUTH"); break;
+            case WEST: new Quaternionf().rotateY((float) Math.toRadians(90)); LOGGER.info("WEST"); break;
+            default: LOGGER.warn("No valid direction");
+        };
+        return new Quaternionf().rotateY((float) Math.toRadians(90));
     }
 
     @Override
@@ -61,14 +54,6 @@ public class CustomParticle extends SpriteBillboardParticle {
         float y = (float) (MathHelper.lerp(tickDelta, this.prevPosY, this.y) - cameraPos.getY());
         float z = (float) (MathHelper.lerp(tickDelta, this.prevPosZ, this.z) - cameraPos.getZ());
 
-
-        // Optionally, you can apply random rotation to the particles
-        // Quaternion rotation = new Quaternion(
-        //     this.random.nextFloat() * 360.0F,
-        //     this.random.nextFloat() * 360.0F,
-        //     this.random.nextFloat() * 360.0F,
-        //     true
-        // );
         Vector3f[] vertices = new Vector3f[] {
                 new Vector3f(-1.0F, -1.0F, 0.0F),
                 new Vector3f(-1.0F, 1.0F, 0.0F),
@@ -80,7 +65,6 @@ public class CustomParticle extends SpriteBillboardParticle {
         for (Vector3f vertex : vertices) {
             vertex.mul(scale);
             vertex.rotate(rotation);
-            //LOGGER.info(String.valueOf(rotation));
             vertex.add(x, y, z);
         }
 
@@ -99,10 +83,8 @@ public class CustomParticle extends SpriteBillboardParticle {
     @Override
     public void tick() {
         super.tick();
-        //this.alpha = (-(1/(float)maxAge) * age + 1);
-        float lifespan = (float) (maxAge * 0.95);  // Calculate 5% of the maxAge
+        float lifespan = (float) (maxAge * 0.95);  // Calculate 95% of the maxAge
         if (age >= lifespan) {
-            //LOGGER.info(String.valueOf(age));
             this.alpha = 1 - ((age - lifespan) / (maxAge - lifespan));
         } else {
             this.alpha = 1;
@@ -117,10 +99,17 @@ public class CustomParticle extends SpriteBillboardParticle {
             LOGGER.info("CustomParticle Factory initialized with spriteProvider");
         }
 
+        static Direction side;
+        public static void getDirection(Direction sideGot) {
+            side = sideGot;
+        }
+
         @Override
         public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
-            CustomParticle particle = new CustomParticle(world, x, y, z, velocityX, velocityY, velocityZ);
-            LOGGER.info("Creating CustomParticle at ({}, {}, {}) with velocity ({}, {}, {})", x, y, z, velocityX, velocityY, velocityZ);
+            // Assuming the direction is passed here, for example purposes we use Direction.NORTH
+            Direction direction = side; // You can change this to any direction based on your needs
+            CustomParticle particle = new CustomParticle(world, x, y, z, velocityX, velocityY, velocityZ, direction);
+            LOGGER.info("Creating CustomParticle at ({}, {}, {}) with velocity ({}, {}, {}) and direction ({})", x, y, z, velocityX, velocityY, velocityZ, side);
             particle.setSprite(this.spriteProvider);
             return particle;
         }
