@@ -6,6 +6,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
@@ -56,7 +57,7 @@ public class RayCast {
                     LOGGER.info("Ray hit block at {}, {}, {}", hitX, hitY, hitZ);
                     setDirection(result.getSide());
                     //MinecraftClient.getInstance().player.sendMessage(Text.of("Ray hit block at " + hitX + " " + hitY + " " + hitZ));
-                    spawnParticle(hitX, hitY, hitZ);
+                    spawnParticle(hitX, hitY, hitZ, result.getSide());
                 } else {
                     LOGGER.info("Ray did not hit any block within reach.");
                     //MinecraftClient.getInstance().player.sendMessage(Text.of("Ray did not hit any block within reach."));
@@ -68,10 +69,18 @@ public class RayCast {
     static ClientWorld world = MinecraftClient.getInstance().world;
 
 
-    public static void spawnParticle(float hitX, float hitY, float hitZ) {
+    public static void spawnParticle(float hitX, float hitY, float hitZ, Direction direction) {
         if (world != null) {
-            LOGGER.info("Spawning CustomParticle at ({}, {}, {}) with velocity ({}, {}, {})", hitX, hitY, hitZ, 0, 0, 0);
-            world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY, hitZ, 0, 0, 0);
+            //LOGGER.info("Spawning CustomParticle at ({}, {}, {}) with velocity ({}, {}, {})", hitX, hitY, hitZ, 0, 0, 0);
+            switch (direction) {
+                case UP -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY + 0.001, hitZ, 0, 0, 0);
+                case DOWN -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY - 0.001, hitZ, 0, 0, 0);
+                case NORTH -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY, hitZ - 0.001, 0, 0, 0);
+                case EAST -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX + 0.001, hitY, hitZ, 0, 0, 0);
+                case SOUTH -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY, hitZ + 0.001, 0, 0, 0);
+                case WEST -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX - 0.001, hitY, hitZ, 0, 0, 0);
+            }
+
         }
     }
 }
