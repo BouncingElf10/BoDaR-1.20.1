@@ -19,14 +19,14 @@ public class CustomParticle extends SpriteBillboardParticle {
 
     protected CustomParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Direction direction) {
         super(world, x, y, z, velocityX, velocityY, velocityZ);
-        this.scale = 0.2F;
+        this.scale = 0.02F;
         this.maxAge = 400;
         this.setVelocity(velocityX, velocityY, velocityZ);
         this.rotation = getRotationQuaternion(direction);
     }
 
     private float getScale(float tickDelta) {
-        return 0.2F;
+        return 0.02F;
     }
 
     @Override
@@ -121,7 +121,7 @@ public class CustomParticle extends SpriteBillboardParticle {
         public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
             Direction direction = side; // Use the stored direction
             CustomParticle particle = new CustomParticle(world, x, y, z, velocityX, velocityY, velocityZ, direction);
-            LOGGER.info("Creating CustomParticle at ({}, {}, {}) with velocity ({}, {}, {}) and direction ({})", x, y, z, velocityX, velocityY, velocityZ, side);
+            //LOGGER.info("Creating CustomParticle at ({}, {}, {}) with velocity ({}, {}, {}) and direction ({})", x, y, z, velocityX, velocityY, velocityZ, side);
             particle.setSprite(this.spriteProvider);
             return particle;
         }

@@ -3,18 +3,13 @@ package net.bouncingelf10.bodar;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.resource.Resource;
-import net.minecraft.resource.ResourceManager;
+import net.minecraft.client.util.Window;
 import net.minecraft.util.Identifier;
 
 import static net.bouncingelf10.bodar.RayCast.rayCast;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.util.Optional;
 
 public class BoDaRClient implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(BoDaRClient.class);
@@ -29,10 +24,31 @@ public class BoDaRClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (ModKeyBindings.exampleKeyBinding.wasPressed()) {
                 LOGGER.info("R pressed");
-                float xAxis = 0;
-                float yAxis = 0;
-                rayCast(xAxis, yAxis);
+                Window window = client.getWindow();
+                LOGGER.info("Screen Resolution: {}, {}", window.getWidth(), window.getHeight());
 
+                var density = 1;
+                var width = window.getWidth() / 60;
+                var height = window.getHeight() / 60;
+
+                var totalPoints = Math.floor(width * height * density);
+
+                var spacing = Math.sqrt(1 / density);
+
+                // Adjust origin to the center of the screen
+                var centerX = width / 2;
+                var centerY = height / 2;
+
+                // Distribute points across the window
+                for (var x = -centerX; x < centerX; x += spacing) {
+                    for (var y = -centerY; y < centerY; y += spacing) {
+                        // Adjust x and y to the center of each grid cell for more accurate distribution
+                        float xOffset = (float) (x + spacing / 2);
+                        float yOffset = (float) (y + spacing / 2);
+                        LOGGER.info("New Offset: {}, {}", xOffset, yOffset);
+                        rayCast(xOffset, yOffset);
+                    }
+                }
             }
         });
 
