@@ -26,8 +26,8 @@ public class RayCast {
         if (client.player != null) {
             Vec2f headRotation = client.player.getRotationClient();
             Vec3d headLocation = client.player.getCameraPosVec(1);
-            LOGGER.info("Player Head Rotation: {}, {}", headRotation.y, headRotation.x);
-            LOGGER.info("Player Head Location: {}, {}, {}", headLocation.x, headLocation.y, headLocation.z);
+            //LOGGER.info("Player Head Rotation: {}, {}", headRotation.y, headRotation.x);
+            //LOGGER.info("Player Head Location: {}, {}, {}", headLocation.x, headLocation.y, headLocation.z);
             double reachDistance = 16.0; // Set your desired reach distance
 
             // Calculate the direction vector
@@ -44,7 +44,7 @@ public class RayCast {
 
             Vec3d direction = new Vec3d(deltaX, deltaY, deltaZ).normalize().multiply(reachDistance);
 
-            LOGGER.info("Player New Offset Head Location: {}, {}, {}", headLocation.x, headLocation.y, headLocation.z);
+            //LOGGER.info("Player New Offset Head Location: {}, {}, {}", headLocation.x, headLocation.y, headLocation.z);
 
             // Perform a raycast from the player's head location
             Vec3d target = headLocation.add(direction);
@@ -76,7 +76,7 @@ public class RayCast {
 
     public static void spawnParticle(float hitX, float hitY, float hitZ, Direction direction) {
         if (world != null) {
-            //LOGGER.info("Spawning CustomParticle at ({}, {}, {}) with velocity ({}, {}, {})", hitX, hitY, hitZ, 0, 0, 0);
+            LOGGER.info("Spawning Particle at: {}, {}, {}", hitX, hitY, hitZ);
             switch (direction) {
                 case UP -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY + 0.0001, hitZ, 0, 0, 0);
                 case DOWN -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY - 0.0001, hitZ, 0, 0, 0);
