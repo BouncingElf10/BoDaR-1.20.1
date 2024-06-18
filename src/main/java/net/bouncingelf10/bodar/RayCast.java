@@ -36,10 +36,15 @@ public class RayCast {
             double deltaX = -Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
             double deltaY = -Math.sin(Math.toRadians(pitch));
             double deltaZ = Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
-            //apply offset
-            headLocation = headLocation.add(deltaX * offsetX, deltaY * offsetY, deltaZ * offsetX);
-            LOGGER.info("Player New Offset Head Location: {}, {}, {}", headLocation.x, headLocation.y, headLocation.z);
+
+            // Apply offset considering the player's rotation
+            Vec3d rightVec = new Vec3d(-Math.cos(Math.toRadians(yaw)), 0, -Math.sin(Math.toRadians(yaw))).normalize();
+            Vec3d upVec = new Vec3d(0, 1, 0);
+            headLocation = headLocation.add(rightVec.multiply(offsetX)).add(upVec.multiply(offsetY));
+
             Vec3d direction = new Vec3d(deltaX, deltaY, deltaZ).normalize().multiply(reachDistance);
+
+            LOGGER.info("Player New Offset Head Location: {}, {}, {}", headLocation.x, headLocation.y, headLocation.z);
 
             // Perform a raycast from the player's head location
             Vec3d target = headLocation.add(direction);
@@ -73,12 +78,12 @@ public class RayCast {
         if (world != null) {
             //LOGGER.info("Spawning CustomParticle at ({}, {}, {}) with velocity ({}, {}, {})", hitX, hitY, hitZ, 0, 0, 0);
             switch (direction) {
-                case UP -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY + 0.001, hitZ, 0, 0, 0);
-                case DOWN -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY - 0.001, hitZ, 0, 0, 0);
-                case NORTH -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY, hitZ - 0.001, 0, 0, 0);
-                case EAST -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX + 0.001, hitY, hitZ, 0, 0, 0);
-                case SOUTH -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY, hitZ + 0.001, 0, 0, 0);
-                case WEST -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX - 0.001, hitY, hitZ, 0, 0, 0);
+                case UP -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY + 0.0001, hitZ, 0, 0, 0);
+                case DOWN -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY - 0.0001, hitZ, 0, 0, 0);
+                case NORTH -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY, hitZ - 0.0001, 0, 0, 0);
+                case EAST -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX + 0.0001, hitY, hitZ, 0, 0, 0);
+                case SOUTH -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY, hitZ + 0.0001, 0, 0, 0);
+                case WEST -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX - 0.0001, hitY, hitZ, 0, 0, 0);
             }
 
         }
