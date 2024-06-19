@@ -16,18 +16,17 @@ public class BoDaRClient implements ClientModInitializer {
     private static final Identifier JSON_ID = new Identifier("bodar", "particles/custom_particle.json");
     private static final Identifier TEXTURE_ID = new Identifier("bodar", "textures/particle/custom_particle.png");
 
-
     @Override
     public void onInitializeClient() {
         LOGGER.info("Initializing client");
         ModKeyBindings.registerKeyBindings();
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (ModKeyBindings.exampleKeyBinding.wasPressed()) {
+            if (ModKeyBindings.exampleKeyBinding.isPressed()) {
                 LOGGER.info("R pressed");
                 Window window = client.getWindow();
-                LOGGER.info("Screen Resolution: {}, {}", window.getWidth(), window.getHeight());
+                //LOGGER.info("Screen Resolution: {}, {}", window.getWidth(), window.getHeight());
 
-                var density = 1;
+                var density = 0.1;
                 var width = window.getWidth() / 60;
                 var height = window.getHeight() / 60;
 
@@ -36,6 +35,7 @@ public class BoDaRClient implements ClientModInitializer {
                 var spacing = Math.sqrt(1 / density);
 
                 // Adjust origin to the center of the screen
+
                 var centerX = width / 2;
                 var centerY = height / 2;
 
@@ -43,8 +43,8 @@ public class BoDaRClient implements ClientModInitializer {
                 for (var x = -centerX; x < centerX; x += spacing) {
                     for (var y = -centerY; y < centerY; y += spacing) {
                         // Adjust x and y to the center of each grid cell for more accurate distribution
-                        float xOffset = (float) (x + spacing / 2);
-                        float yOffset = (float) (y + spacing / 2);
+                        float xOffset = (float) ((float) (x + spacing / 2) + Math.random() / density);
+                        float yOffset = (float) ((float) (y + spacing / 2) +  Math.random() / density);
                         LOGGER.info("New Offset: {}, {}", xOffset, yOffset);
                         rayCast(xOffset, yOffset);
                     }
