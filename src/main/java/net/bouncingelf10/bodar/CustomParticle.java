@@ -38,22 +38,28 @@ public class CustomParticle extends SpriteBillboardParticle {
         switch (direction) {
             case UP:
                 LOGGER.info("UP");
-                return new Quaternionf().rotateX((float) Math.toRadians(90));
+                return new Quaternionf().rotateX((float) Math.toRadians(90))
+                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
             case DOWN:
                 LOGGER.info("DOWN");
-                return new Quaternionf().rotateX((float) Math.toRadians(-90));
+                return new Quaternionf().rotateX((float) Math.toRadians(-90))
+                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
             case NORTH:
                 LOGGER.info("NORTH");
-                return new Quaternionf().rotateY((float) Math.toRadians(0));
+                return new Quaternionf().rotateY((float) Math.toRadians(0))
+                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
             case EAST:
                 LOGGER.info("EAST");
-                return new Quaternionf().rotateY((float) Math.toRadians(-90));
+                return new Quaternionf().rotateY((float) Math.toRadians(-90))
+                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
             case SOUTH:
                 LOGGER.info("SOUTH");
-                return new Quaternionf().rotateY((float) Math.toRadians(180));
+                return new Quaternionf().rotateY((float) Math.toRadians(180))
+                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
             case WEST:
                 LOGGER.info("WEST");
-                return new Quaternionf().rotateY((float) Math.toRadians(90));
+                return new Quaternionf().rotateY((float) Math.toRadians(90))
+                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
             default:
                 LOGGER.warn("No valid direction");
                 return new Quaternionf();
