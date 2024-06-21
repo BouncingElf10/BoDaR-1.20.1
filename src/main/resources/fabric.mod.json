@@ -8,8 +8,8 @@
 		"BouncingElf10"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/BouncingElf10/BoDaR-1.20.1",
+		"sources": "https://github.com/BouncingElf10/BoDaR-1.20.1"
 	},
 	"license": "CC-BY-NC-4.0",
 	"icon": "assets/bodar/icon.png",
@@ -23,6 +23,9 @@
 		],
 		"fabric-datagen": [
 			"net.bouncingelf10.bodar.BoDaRDataGenerator"
+		],
+		"modmenu": [
+			"net.bouncingelf10.bodar.ModMenuIntegration"
 		]
 	},
 	"mixins": [
@@ -32,7 +35,8 @@
 		"fabricloader": ">=0.15.11",
 		"minecraft": "~1.20.1",
 		"java": ">=17",
-		"fabric-api": "*"
+		"fabric-api": "*",
+		"modmenu": ">=7.0.0"
 	},
 	"suggests": {
 		"another-mod": "*"

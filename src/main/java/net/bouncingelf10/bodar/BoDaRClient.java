@@ -20,6 +20,8 @@ public class BoDaRClient implements ClientModInitializer {
     public void onInitializeClient() {
         LOGGER.info("Initializing client");
         ModKeyBindings.registerKeyBindings();
+        LOGGER.info("Keybind(s) Initialised");
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (ModKeyBindings.RKeyBinding.isPressed()) {
                 LOGGER.info("R pressed");
