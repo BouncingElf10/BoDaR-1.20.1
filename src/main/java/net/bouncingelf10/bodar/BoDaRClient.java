@@ -6,10 +6,10 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.minecraft.client.util.Window;
 import net.minecraft.util.Identifier;
 
-import static net.bouncingelf10.bodar.RayCast.rayCast;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static net.bouncingelf10.bodar.RayCast.rayCast;
 
 public class BoDaRClient implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(BoDaRClient.class);
@@ -25,28 +25,20 @@ public class BoDaRClient implements ClientModInitializer {
                 LOGGER.info("R pressed");
                 Window window = client.getWindow();
                 //LOGGER.info("Screen Resolution: {}, {}", window.getWidth(), window.getHeight());
+                var size = 60;
+                var randomness = 1;
+                var width = window.getWidth() / size;
+                var height = window.getHeight() / size;
 
-                var density = 0.1;
-                var width = window.getWidth() / 60;
-                var height = window.getHeight() / 60;
-
-                var spacing = Math.sqrt(1 / density);
-
-                // Adjust origin to the center of the screen
-
-                var centerX = width / 2;
-                var centerY = height / 2;
-
-                // Distribute points across the window
-                for (var x = -centerX; x < centerX; x += spacing) {
-                    for (var y = -centerY; y < centerY; y += spacing) {
-                        // Adjust x and y to the center of each grid cell for more accurate distribution
-                        float xOffset = (float) ((float) (x + spacing / 2) + Math.random() / density);
-                        float yOffset = (float) ((float) (y + spacing / 2) +  Math.random() / density);
+                for (var i = (int)(height / 2 * -1); i <= (int)(height / 2); i++) {
+                    for (var j = (int)(width / 2 * -1); j <= (int)(width / 2); j++) {
+                        float xOffset = (float) (j + Math.random() * (2 * randomness) - randomness);
+                        float yOffset = (float) (i + Math.random() * (2 * randomness) - randomness);
                         //LOGGER.info("New Offset: {}, {}", xOffset, yOffset);
                         rayCast(xOffset, yOffset);
                     }
                 }
+
             }
         });
 
