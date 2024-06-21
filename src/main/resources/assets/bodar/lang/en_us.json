@@ -1,5 +1,15 @@
 {
   "key.bodar.example": "Use BoDaR",
   "key.bodar.open_config": "Open BoDaR Config Menu",
-  "category.bodar.main": "BoDaR"
+  "category.bodar.main": "BoDaR",
+  "text.autoconfig.bodar.option.size": "Size",
+  "text.autoconfig.bodar.option.size.@Tooltip": "How big the area is of the BoDaR beam",
+  "text.autoconfig.bodar.option.randomness": "Randomness",
+  "text.autoconfig.bodar.option.randomness.@Tooltip": "How spread out the dots are",
+  "text.autoconfig.bodar.option.randomRotation": "Random Rotation",
+  "text.autoconfig.bodar.option.randomRotation.@Tooltip": "If the dot are randomly rotated or not",
+  "text.autoconfig.bodar.option.maxAge": "Max Age",
+  "text.autoconfig.bodar.option.maxAge.@Tooltip": "Maximum age of of the particles",
+  "text.autoconfig.bodar.option.particleSize": "Particle Size",
+  "text.autoconfig.bodar.option.particleSize.@Tooltip": "How big the particles are"
 }
