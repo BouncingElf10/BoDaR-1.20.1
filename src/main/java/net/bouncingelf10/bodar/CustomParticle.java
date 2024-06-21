@@ -11,18 +11,36 @@ import net.minecraft.util.math.Vec3d;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import java.util.Objects;
+
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 
 public class CustomParticle extends SpriteBillboardParticle {
 
-    private final Quaternionf rotation;
+    static String blockIDString;
+    static void getBlockID(String blockID) {
+        blockIDString = blockID;
+        //LOGGER.info(blockIDString);
+        if (Objects.equals(blockIDString, "minecraft:diamond_ore") || Objects.equals(blockIDString, "minecraft:deepslate_diamond_ore")) {
+            colorBlockID = new Vec3d(31, 145, 9);
+        } else if (Objects.equals(blockIDString, "minecraft:furnace") || Objects.equals(blockIDString, "minecraft:crafting_table")) {
+            colorBlockID = new Vec3d(224, 167, 9);
+        } else {
+            colorBlockID = new Vec3d(254,254,254);
+        }
 
+
+    }
+
+    private final Quaternionf rotation;
+    static Vec3d colorBlockID;
     protected CustomParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Direction direction) {
         super(world, x, y, z, velocityX, velocityY, velocityZ);
         this.scale = 0.02F;
         this.maxAge = 400;
         this.setVelocity(velocityX, velocityY, velocityZ);
         this.rotation = getRotationQuaternion(direction);
+        this.setColor((float) ((float) 255 - colorBlockID.x), (float) ((float) 255 - colorBlockID.y), (float) ((float) 255 - colorBlockID.z));
     }
 
     private float getScale(float tickDelta) {
@@ -68,6 +86,7 @@ public class CustomParticle extends SpriteBillboardParticle {
 
     @Override
     public void buildGeometry(VertexConsumer vertexConsumer, Camera camera, float tickDelta) {
+
         Vec3d cameraPos = camera.getPos();
         float x = (float) (MathHelper.lerp(tickDelta, this.prevPosX, this.x) - cameraPos.getX());
         float y = (float) (MathHelper.lerp(tickDelta, this.prevPosY, this.y) - cameraPos.getY());
@@ -102,12 +121,11 @@ public class CustomParticle extends SpriteBillboardParticle {
     @Override
     public void tick() {
         super.tick();
-        float lifespan = (float) (maxAge * 0.95);  // Calculate 95% of the maxAge
+        float lifespan = (float) (maxAge * 0.95 - (Math.random() / 10));  // Calculate 95% of the maxAge
         if (age >= lifespan) {
             this.alpha = 1 - ((age - lifespan) / (maxAge - lifespan));
         } else {
             this.alpha = 1;
-            //this.blue = 255;
         }
     }
 
@@ -126,6 +144,7 @@ public class CustomParticle extends SpriteBillboardParticle {
 
         @Override
         public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
+
             Direction direction = side; // Use the stored direction
             CustomParticle particle = new CustomParticle(world, x, y, z, velocityX, velocityY, velocityZ, direction);
             //LOGGER.info("Creating CustomParticle at ({}, {}, {}) with velocity ({}, {}, {}) and direction ({})", x, y, z, velocityX, velocityY, velocityZ, side);
