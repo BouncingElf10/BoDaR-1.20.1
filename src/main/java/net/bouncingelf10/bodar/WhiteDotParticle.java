@@ -43,7 +43,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         this.setColor((float) ((float) 255 - colorBlockID.x), (float) ((float) 255 - colorBlockID.y), (float) ((float) 255 - colorBlockID.z));
     }
 
-    private float getScale(float tickDelta) {
+    private float getScale() {
         return 0.02F;
     }
 
@@ -53,35 +53,32 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
     }
 
     private Quaternionf getRotationQuaternion(Direction direction) {
-        switch (direction) {
-            case UP:
+        return switch (direction) {
+            case UP ->
                 //LOGGER.info("UP");
-                return new Quaternionf().rotateX((float) Math.toRadians(90))
-                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
-            case DOWN:
+                    new Quaternionf().rotateX((float) Math.toRadians(90))
+                            .rotateZ((float) Math.toRadians(random.nextInt(360)));
+            case DOWN ->
                 //LOGGER.info("DOWN");
-                return new Quaternionf().rotateX((float) Math.toRadians(-90))
-                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
-            case NORTH:
+                    new Quaternionf().rotateX((float) Math.toRadians(-90))
+                            .rotateZ((float) Math.toRadians(random.nextInt(360)));
+            case NORTH ->
                 //LOGGER.info("NORTH");
-                return new Quaternionf().rotateY((float) Math.toRadians(0))
-                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
-            case EAST:
+                    new Quaternionf().rotateY((float) Math.toRadians(0))
+                            .rotateZ((float) Math.toRadians(random.nextInt(360)));
+            case EAST ->
                 //LOGGER.info("EAST");
-                return new Quaternionf().rotateY((float) Math.toRadians(-90))
-                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
-            case SOUTH:
+                    new Quaternionf().rotateY((float) Math.toRadians(-90))
+                            .rotateZ((float) Math.toRadians(random.nextInt(360)));
+            case SOUTH ->
                 //LOGGER.info("SOUTH");
-                return new Quaternionf().rotateY((float) Math.toRadians(180))
-                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
-            case WEST:
+                    new Quaternionf().rotateY((float) Math.toRadians(180))
+                            .rotateZ((float) Math.toRadians(random.nextInt(360)));
+            case WEST ->
                 //LOGGER.info("WEST");
-                return new Quaternionf().rotateY((float) Math.toRadians(90))
-                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
-            default:
-                LOGGER.warn("No valid direction");
-                return new Quaternionf();
-        }
+                    new Quaternionf().rotateY((float) Math.toRadians(90))
+                            .rotateZ((float) Math.toRadians(random.nextInt(360)));
+        };
     }
 
     @Override
@@ -99,7 +96,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
                 new Vector3f(1.0F, -1.0F, 0.0F)
         };
 
-        float scale = this.getScale(tickDelta);
+        float scale = this.getScale();
         for (Vector3f vertex : vertices) {
             vertex.mul(scale);
             vertex.rotate(rotation);

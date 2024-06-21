@@ -59,7 +59,6 @@ public class RayCast {
             BlockHitResult result = client.world.raycast(new RaycastContext(headLocation, target, RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, client.player));
             // Handle raycast result
             if (result.getType() == BlockHitResult.Type.BLOCK) {
-                BlockPos blockPos = result.getBlockPos();
                 Vec3d hitVec = result.getPos();
 
                 // Convert BlockPos to float coordinates
@@ -77,8 +76,6 @@ public class RayCast {
 
                 setDirection(result.getSide());
                 spawnParticle(hitX, hitY, hitZ, result.getSide());
-            } else {
-                //LOGGER.info("Ray did not hit any block within reach.");
             }
         }
     }
