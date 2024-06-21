@@ -15,13 +15,13 @@ public class BoDaR implements ModInitializer {
 	public static final String MOD_ID = "bodar";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	public static final DefaultParticleType CUSTOM_PARTICLE = FabricParticleTypes.simple();
+	public static final DefaultParticleType WhiteDotParticle = FabricParticleTypes.simple();
 
 	@Override
 	public void onInitialize() {
 		LOGGER.info("BoDaR Initialized!");
-		Registry.register(Registries.PARTICLE_TYPE, new Identifier(MOD_ID, "custom_particle"), CUSTOM_PARTICLE);
-		LOGGER.info("CustomParticle registered with ID bodar:custom_particle");
+		Registry.register(Registries.PARTICLE_TYPE, new Identifier(MOD_ID, "custom_particle"), WhiteDotParticle);
+		LOGGER.info("WhiteDotParticle registered with ID bodar:custom_particle");
 
 		LOGGER.info("Registering AutoConfig");
 		AutoConfig.register(BoDaRConfig.class, GsonConfigSerializer::new);

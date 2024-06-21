@@ -15,7 +15,7 @@ import java.util.Objects;
 
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 
-public class CustomParticle extends SpriteBillboardParticle {
+public class WhiteDotParticle extends SpriteBillboardParticle {
 
     static String blockIDString;
     static void getBlockID(String blockID) {
@@ -34,7 +34,7 @@ public class CustomParticle extends SpriteBillboardParticle {
 
     private final Quaternionf rotation;
     static Vec3d colorBlockID;
-    protected CustomParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Direction direction) {
+    protected WhiteDotParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Direction direction) {
         super(world, x, y, z, velocityX, velocityY, velocityZ);
         this.scale = 0.02F;
         this.maxAge = 400;
@@ -134,7 +134,7 @@ public class CustomParticle extends SpriteBillboardParticle {
 
         public Factory(SpriteProvider spriteProvider) {
             this.spriteProvider = spriteProvider;
-            LOGGER.info("CustomParticle Factory initialized with spriteProvider");
+            LOGGER.info("WhiteDotParticle Factory initialized with spriteProvider");
         }
 
         static Direction side;
@@ -146,8 +146,8 @@ public class CustomParticle extends SpriteBillboardParticle {
         public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
 
             Direction direction = side; // Use the stored direction
-            CustomParticle particle = new CustomParticle(world, x, y, z, velocityX, velocityY, velocityZ, direction);
-            //LOGGER.info("Creating CustomParticle at ({}, {}, {}) with velocity ({}, {}, {}) and direction ({})", x, y, z, velocityX, velocityY, velocityZ, side);
+            WhiteDotParticle particle = new WhiteDotParticle(world, x, y, z, velocityX, velocityY, velocityZ, direction);
+            //LOGGER.info("Creating WhiteDotParticle at ({}, {}, {}) with velocity ({}, {}, {}) and direction ({})", x, y, z, velocityX, velocityY, velocityZ, side);
             particle.setSprite(this.spriteProvider);
             return particle;
         }
