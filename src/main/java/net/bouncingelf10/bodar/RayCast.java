@@ -1,8 +1,12 @@
 package net.bouncingelf10.bodar;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
@@ -13,7 +17,7 @@ import net.minecraft.world.RaycastContext;
 
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 import static net.bouncingelf10.bodar.CustomParticle.Factory.setDirection;
-
+import static net.bouncingelf10.bodar.CustomParticle.getBlockID;
 
 import net.bouncingelf10.bodar.CustomParticle.*;
 
@@ -70,6 +74,13 @@ public class RayCast {
                 float hitZ = (float) hitVec.z;
 
                 //LOGGER.info("Ray hit block at {}, {}, {}", hitX, hitY, hitZ);
+                BlockState blockState = world.getBlockState(result.getBlockPos());
+                Block block = blockState.getBlock();
+                Identifier blockId = Registries.BLOCK.getId(block);
+
+                getBlockID(String.valueOf(blockId));
+                //LOGGER.info("Block: {}", blockId);
+
                 setDirection(result.getSide());
                 spawnParticle(hitX, hitY, hitZ, result.getSide());
             } else {
