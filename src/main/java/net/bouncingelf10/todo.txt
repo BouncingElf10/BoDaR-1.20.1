@@ -1,8 +1,10 @@
-Make particlae sclae nicely
+Make particlae sclae nicely *
 
-Emmisive particles
+Emmisive particles *
 
-Particle should lock on blocks and not follow players
+Particle should lock on blocks and not follow players *
+
+Color detect
 
 More BoDaR modes
 

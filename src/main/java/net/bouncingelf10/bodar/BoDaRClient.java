@@ -21,7 +21,7 @@ public class BoDaRClient implements ClientModInitializer {
         LOGGER.info("Initializing client");
         ModKeyBindings.registerKeyBindings();
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (ModKeyBindings.exampleKeyBinding.isPressed()) {
+            if (ModKeyBindings.RKeyBinding.isPressed()) {
                 LOGGER.info("R pressed");
                 Window window = client.getWindow();
                 //LOGGER.info("Screen Resolution: {}, {}", window.getWidth(), window.getHeight());
@@ -29,8 +29,6 @@ public class BoDaRClient implements ClientModInitializer {
                 var density = 0.1;
                 var width = window.getWidth() / 60;
                 var height = window.getHeight() / 60;
-
-                var totalPoints = Math.floor(width * height * density);
 
                 var spacing = Math.sqrt(1 / density);
 
@@ -45,7 +43,7 @@ public class BoDaRClient implements ClientModInitializer {
                         // Adjust x and y to the center of each grid cell for more accurate distribution
                         float xOffset = (float) ((float) (x + spacing / 2) + Math.random() / density);
                         float yOffset = (float) ((float) (y + spacing / 2) +  Math.random() / density);
-                        LOGGER.info("New Offset: {}, {}", xOffset, yOffset);
+                        //LOGGER.info("New Offset: {}, {}", xOffset, yOffset);
                         rayCast(xOffset, yOffset);
                     }
                 }
