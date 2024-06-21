@@ -10,10 +10,10 @@ import org.slf4j.LoggerFactory;
 public class ModKeyBindings {
     public static final Logger LOGGER = LoggerFactory.getLogger(ModKeyBindings.class);
 
-    public static KeyBinding exampleKeyBinding;
+    public static KeyBinding RKeyBinding;
 
     public static void registerKeyBindings() {
-        exampleKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        RKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.bodar.example", // The translation key of the keybinding's name
                 InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
                 GLFW.GLFW_KEY_R, // The keycode of the key

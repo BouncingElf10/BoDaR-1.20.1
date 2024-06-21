@@ -33,26 +33,24 @@ public class RayCast {
             double reachDistance = 16.0; // Reach distance
 
             // Calculate the direction vector
-            double deltaX;
-            if (client.player.getPitch(1.0f) >= 85) {
-                deltaX = -Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch + 45));
-            } else {
-                deltaX = -Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
-            }
-
-            double deltaY;
-
-            if (client.player.getPitch(1.0f) >= 85) {
-                deltaY = -Math.sin(Math.toRadians(pitch + 45));
-            } else {
-                deltaY = -Math.sin(Math.toRadians(pitch));
-            }
-
+            double deltaX = -Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
+            double deltaY = -Math.sin(Math.toRadians(pitch));
             double deltaZ = Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
+
 
             // Create right and up vectors for the player's view direction
             Vec3d rightVec = new Vec3d(-Math.cos(Math.toRadians(yaw)), 0, -Math.sin(Math.toRadians(yaw))).normalize();
-            Vec3d upVec = new Vec3d(0, 1, 0);
+
+            Vec3d upVec;
+            if (client.player.getPitch() >= 65 || client.player.getPitch() <= -65) {
+                if (client.player.getHorizontalFacing() == Direction.WEST || client.player.getHorizontalFacing() == Direction.EAST) {
+                    upVec = new Vec3d(1, 0, 0);
+                } else {
+                    upVec = new Vec3d(0, 0, 1);
+                }
+            } else {
+                upVec = new Vec3d(0, 1, 0);
+            }
 
             // Apply offsets in screen space
             Vec3d adjustedLocation = headLocation.add(rightVec.multiply(offsetX)).add(upVec.multiply(offsetY));
@@ -71,11 +69,11 @@ public class RayCast {
                 float hitY = (float) hitVec.y;
                 float hitZ = (float) hitVec.z;
 
-                LOGGER.info("Ray hit block at {}, {}, {}", hitX, hitY, hitZ);
+                //LOGGER.info("Ray hit block at {}, {}, {}", hitX, hitY, hitZ);
                 setDirection(result.getSide());
                 spawnParticle(hitX, hitY, hitZ, result.getSide());
             } else {
-                LOGGER.info("Ray did not hit any block within reach.");
+                //LOGGER.info("Ray did not hit any block within reach.");
             }
         }
     }
@@ -85,7 +83,7 @@ public class RayCast {
 
     public static void spawnParticle(float hitX, float hitY, float hitZ, Direction direction) {
         if (world != null) {
-            LOGGER.info("Spawning Particle at: {}, {}, {}", hitX, hitY, hitZ);
+            //LOGGER.info("Spawning Particle at: {}, {}, {}", hitX, hitY, hitZ);
             switch (direction) {
                 case UP -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY + 0.0001, hitZ, 0, 0, 0);
                 case DOWN -> world.addParticle(BoDaR.CUSTOM_PARTICLE, hitX, hitY - 0.0001, hitZ, 0, 0, 0);

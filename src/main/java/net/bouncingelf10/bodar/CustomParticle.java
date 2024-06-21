@@ -37,27 +37,27 @@ public class CustomParticle extends SpriteBillboardParticle {
     private Quaternionf getRotationQuaternion(Direction direction) {
         switch (direction) {
             case UP:
-                LOGGER.info("UP");
+                //LOGGER.info("UP");
                 return new Quaternionf().rotateX((float) Math.toRadians(90))
                         .rotateZ((float) Math.toRadians(random.nextInt(360)));
             case DOWN:
-                LOGGER.info("DOWN");
+                //LOGGER.info("DOWN");
                 return new Quaternionf().rotateX((float) Math.toRadians(-90))
                         .rotateZ((float) Math.toRadians(random.nextInt(360)));
             case NORTH:
-                LOGGER.info("NORTH");
+                //LOGGER.info("NORTH");
                 return new Quaternionf().rotateY((float) Math.toRadians(0))
                         .rotateZ((float) Math.toRadians(random.nextInt(360)));
             case EAST:
-                LOGGER.info("EAST");
+                //LOGGER.info("EAST");
                 return new Quaternionf().rotateY((float) Math.toRadians(-90))
                         .rotateZ((float) Math.toRadians(random.nextInt(360)));
             case SOUTH:
-                LOGGER.info("SOUTH");
+                //LOGGER.info("SOUTH");
                 return new Quaternionf().rotateY((float) Math.toRadians(180))
                         .rotateZ((float) Math.toRadians(random.nextInt(360)));
             case WEST:
-                LOGGER.info("WEST");
+                //LOGGER.info("WEST");
                 return new Quaternionf().rotateY((float) Math.toRadians(90))
                         .rotateZ((float) Math.toRadians(random.nextInt(360)));
             default:
@@ -107,6 +107,7 @@ public class CustomParticle extends SpriteBillboardParticle {
             this.alpha = 1 - ((age - lifespan) / (maxAge - lifespan));
         } else {
             this.alpha = 1;
+            //this.blue = 255;
         }
     }
 
