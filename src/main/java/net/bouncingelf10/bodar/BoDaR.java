@@ -8,6 +8,8 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 
 public class BoDaR implements ModInitializer {
 	public static final String MOD_ID = "bodar";
@@ -20,5 +22,8 @@ public class BoDaR implements ModInitializer {
 		LOGGER.info("BoDaR Initialized!");
 		Registry.register(Registries.PARTICLE_TYPE, new Identifier(MOD_ID, "custom_particle"), CUSTOM_PARTICLE);
 		LOGGER.info("CustomParticle registered with ID bodar:custom_particle");
+
+		LOGGER.info("Registering AutoConfig");
+		AutoConfig.register(BoDaRConfig.class, GsonConfigSerializer::new);
 	}
 }
