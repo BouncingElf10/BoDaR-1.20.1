@@ -44,7 +44,7 @@ public class BoDaRClient implements ClientModInitializer {
             }
         });
 
-        ParticleFactoryRegistry.getInstance().register(BoDaR.CUSTOM_PARTICLE, CustomParticle.Factory::new);
-        LOGGER.info("CustomParticle Factory registered for bodar:custom_particle");
+        ParticleFactoryRegistry.getInstance().register(BoDaR.WhiteDotParticle, WhiteDotParticle.Factory::new);
+        LOGGER.info("WhiteDotParticle Factory registered for bodar:custom_particle");
     }
 }
