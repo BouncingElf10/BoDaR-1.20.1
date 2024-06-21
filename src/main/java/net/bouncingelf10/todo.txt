@@ -1,10 +1,4 @@
-Make particlae sclae nicely *
-
-Emmisive particles *
-
-Particle should lock on blocks and not follow players *
-
-Color detect
+Color detect config menu
 
 More BoDaR modes
 
@@ -12,4 +6,4 @@ particles away from you should delete
 
 toggleable black textures for blocks
 
-Nice settings menu
+Nice settings menu *
