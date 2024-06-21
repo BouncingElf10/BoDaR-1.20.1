@@ -3,7 +3,6 @@ package net.bouncingelf10.bodar;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
@@ -26,8 +25,8 @@ public class ModKeyBindings {
         KeyBinding openConfigKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.bodar.open_config",
                 InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_L,
-                "category.bodar"
+                GLFW.GLFW_KEY_K,
+                "category.bodar.main"
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
