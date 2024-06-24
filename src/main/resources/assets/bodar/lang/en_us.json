@@ -2,6 +2,8 @@
   "key.bodar.example": "Use BoDaR",
   "key.bodar.open_config": "Open BoDaR Config Menu",
   "category.bodar.main": "BoDaR",
+  "text.autoconfig.bodar.option.isOn": "Active",
+  "text.autoconfig.bodar.option.isOn.@Tooltip": "If the mod is active or not",
   "text.autoconfig.bodar.option.size": "Size",
   "text.autoconfig.bodar.option.size.@Tooltip": "How big the area is of the BoDaR beam",
   "text.autoconfig.bodar.option.randomness": "Randomness",

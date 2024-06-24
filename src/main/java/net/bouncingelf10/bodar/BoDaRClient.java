@@ -19,27 +19,30 @@ public class BoDaRClient implements ClientModInitializer {
         ModKeyBindings.registerKeyBindings();
         LOGGER.info("Keybind(s) Initialised");
 
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (ModKeyBindings.RKeyBinding.isPressed()) {
-                LOGGER.info("R pressed");
-                Window window = client.getWindow();
-                //LOGGER.info("Screen Resolution: {}, {}", window.getWidth(), window.getHeight());
-                var size = 60;
-                var randomness = 1;
-                var width = window.getWidth() / size;
-                var height = window.getHeight() / size;
+        BoDaRConfig config = BoDaRConfig.get();
+        if (config.isOn) { // Config enable / disable
+            ClientTickEvents.END_CLIENT_TICK.register(client -> {
+                if (ModKeyBindings.RKeyBinding.isPressed()) {
+                    LOGGER.info("R pressed");
+                    Window window = client.getWindow();
+                    //LOGGER.info("Screen Resolution: {}, {}", window.getWidth(), window.getHeight());
+                    var size = config.size;
+                    var randomness = config.randomness;
+                    var width = window.getWidth() / size;
+                    var height = window.getHeight() / size;
 
-                for (var i = height / 2 * -1; i <= (height / 2); i++) {
-                    for (var j = width / 2 * -1; j <= (width / 2); j++) {
-                        float xOffset = (float) (j + Math.random() * (2 * randomness) - randomness);
-                        float yOffset = (float) (i + Math.random() * (2 * randomness) - randomness);
-                        //LOGGER.info("New Offset: {}, {}", xOffset, yOffset);
-                        rayCast(xOffset, yOffset);
+                    for (var i = height / 2 * -1; i <= (height / 2); i++) {
+                        for (var j = width / 2 * -1; j <= (width / 2); j++) {
+                            float xOffset = (float) (j + Math.random() * (2 * randomness) - randomness);
+                            float yOffset = (float) (i + Math.random() * (2 * randomness) - randomness);
+                            //LOGGER.info("New Offset: {}, {}", xOffset, yOffset);
+                            rayCast(xOffset, yOffset);
+                        }
                     }
-                }
 
-            }
-        });
+                }
+            });
+        }
 
         ParticleFactoryRegistry.getInstance().register(BoDaR.WhiteDotParticle, WhiteDotParticle.Factory::new);
         LOGGER.info("WhiteDotParticle Factory registered for bodar:custom_particle");
