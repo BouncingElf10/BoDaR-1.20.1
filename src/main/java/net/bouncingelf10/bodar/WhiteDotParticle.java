@@ -1,14 +1,10 @@
 package net.bouncingelf10.bodar;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -55,11 +51,11 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         int colorValue = Integer.parseInt(colorString);
 
         // Convert integer to hexadecimal string
-        String hex = Integer.toHexString(colorValue);
+        StringBuilder hex = new StringBuilder(Integer.toHexString(colorValue));
 
         // Ensure the hex string is formatted correctly to 6 characters
         while (hex.length() < 6) {
-            hex = "0" + hex;
+            hex.insert(0, "0");
         }
 
         // Extract RGB components from the hex string
