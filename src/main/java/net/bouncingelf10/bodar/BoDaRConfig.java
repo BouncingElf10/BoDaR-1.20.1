@@ -4,6 +4,12 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.math.Color;
+import net.minecraft.util.Colors;
+import net.minecraft.util.math.ColorHelper;
+import net.minecraft.util.math.Vec3d;
+
+import java.awt.*;
 
 @Config(name = "bodar")
 public class BoDaRConfig implements ConfigData {
@@ -25,6 +31,15 @@ public class BoDaRConfig implements ConfigData {
 
     @ConfigEntry.Gui.Tooltip
     public float particleSize = 0.02f;
+
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.ColorPicker
+    public int oreColor = 119935;
+
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.ColorPicker
+    public int functionalColor = 999706;
+
 
     public static BoDaRConfig get() {
         return AutoConfig.getConfigHolder(BoDaRConfig.class).getConfig();
