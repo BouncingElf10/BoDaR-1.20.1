@@ -34,17 +34,18 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
 
     private final Quaternionf rotation;
     static Vec3d colorBlockID;
+    BoDaRConfig config = BoDaRConfig.get();
     protected WhiteDotParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Direction direction) {
         super(world, x, y, z, velocityX, velocityY, velocityZ);
-        this.scale = 0.02F;
-        this.maxAge = 400;
+        this.scale = config.particleSize;
+        this.maxAge = config.maxAge;
         this.setVelocity(velocityX, velocityY, velocityZ);
         this.rotation = getRotationQuaternion(direction);
         this.setColor((float) ((float) 255 - colorBlockID.x), (float) ((float) 255 - colorBlockID.y), (float) ((float) 255 - colorBlockID.z));
     }
 
     private float getScale() {
-        return 0.02F;
+        return config.particleSize;
     }
 
     @Override
@@ -53,32 +54,32 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
     }
 
     private Quaternionf getRotationQuaternion(Direction direction) {
-        return switch (direction) {
-            case UP ->
-                //LOGGER.info("UP");
-                    new Quaternionf().rotateX((float) Math.toRadians(90))
-                            .rotateZ((float) Math.toRadians(random.nextInt(360)));
-            case DOWN ->
-                //LOGGER.info("DOWN");
-                    new Quaternionf().rotateX((float) Math.toRadians(-90))
-                            .rotateZ((float) Math.toRadians(random.nextInt(360)));
-            case NORTH ->
-                //LOGGER.info("NORTH");
-                    new Quaternionf().rotateY((float) Math.toRadians(0))
-                            .rotateZ((float) Math.toRadians(random.nextInt(360)));
-            case EAST ->
-                //LOGGER.info("EAST");
-                    new Quaternionf().rotateY((float) Math.toRadians(-90))
-                            .rotateZ((float) Math.toRadians(random.nextInt(360)));
-            case SOUTH ->
-                //LOGGER.info("SOUTH");
-                    new Quaternionf().rotateY((float) Math.toRadians(180))
-                            .rotateZ((float) Math.toRadians(random.nextInt(360)));
-            case WEST ->
-                //LOGGER.info("WEST");
-                    new Quaternionf().rotateY((float) Math.toRadians(90))
-                            .rotateZ((float) Math.toRadians(random.nextInt(360)));
-        };
+        if (config.randomRotation) {
+            return switch (direction) {
+                case UP -> new Quaternionf().rotateX((float) Math.toRadians(90))
+                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
+                case DOWN -> new Quaternionf().rotateX((float) Math.toRadians(-90))
+                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
+                case NORTH -> new Quaternionf().rotateY((float) Math.toRadians(0))
+                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
+                case EAST -> new Quaternionf().rotateY((float) Math.toRadians(-90))
+                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
+                case SOUTH -> new Quaternionf().rotateY((float) Math.toRadians(180))
+                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
+                case WEST -> new Quaternionf().rotateY((float) Math.toRadians(90))
+                        .rotateZ((float) Math.toRadians(random.nextInt(360)));
+            };
+        } else {
+            return switch (direction) {
+                case UP -> new Quaternionf().rotateX((float) Math.toRadians(90));
+                case DOWN -> new Quaternionf().rotateX((float) Math.toRadians(-90));
+                case NORTH -> new Quaternionf().rotateY((float) Math.toRadians(0));
+                case EAST -> new Quaternionf().rotateY((float) Math.toRadians(-90));
+                case SOUTH -> new Quaternionf().rotateY((float) Math.toRadians(180));
+                case WEST -> new Quaternionf().rotateY((float) Math.toRadians(90));
+            };
+        }
+
     }
 
     @Override
