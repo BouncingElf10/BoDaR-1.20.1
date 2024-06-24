@@ -62,7 +62,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         colorBlockID = getColorBlockID(blockIDString);
     }
 
-    private static void loadBlockData() {
+    static void loadBlockData() {
         try (InputStream inputStream = WhiteDotParticle.class.getResourceAsStream("/assets/bodar/blocks.json")) {
             if (inputStream == null) {
                 LOGGER.warn("Resource not found: /assets/bodar/blocks.json");
