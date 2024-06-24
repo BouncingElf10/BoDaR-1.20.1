@@ -1,17 +1,9 @@
 package net.bouncingelf10.bodar;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.gui.ConfigScreenProvider;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-
-import javax.swing.*;
 
 @Config(name = "bodar")
 public class BoDaRConfig implements ConfigData {
