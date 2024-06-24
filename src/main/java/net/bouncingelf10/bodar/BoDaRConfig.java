@@ -33,7 +33,7 @@ public class BoDaRConfig implements ConfigData {
 
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.ColorPicker
-    public int functionalColor = 999706;
+    public int functionalColor = 11112511;
 
 
     public static BoDaRConfig get() {
