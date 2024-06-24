@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
+import me.shedaniel.math.Color;
 
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 
@@ -27,15 +28,33 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
 
     static String blockIDString;
     static Vec3d colorBlockID;
+    static BoDaRConfig config = BoDaRConfig.get();
 
     private static final Set<String> ores = new HashSet<>();
     private static final Set<String> functional = new HashSet<>();
-    private static final Vec3d oreColor = new Vec3d(31, 145, 9);
-    private static final Vec3d functionalColor = new Vec3d(224, 167, 9);
-    private static final Vec3d defaultColor = new Vec3d(254, 254, 254);
+
+    static Vec3d oreColor;
+    static Vec3d functionalColor;
+    static Vec3d defaultColor;
+
+
+    static void resetColors() {
+        Color oreColorHex = Color.ofRGB(Integer.valueOf(("#" + config.oreColor).substring( 1, 3 ), 16 ),
+                Integer.valueOf(("#" + config.oreColor).substring( 3, 5 ), 16 ),
+                Integer.valueOf(("#" + config.oreColor).substring( 5, 7 ), 16 ));
+
+        Color functionalColorHex = Color.ofRGB(Integer.valueOf(("#" + config.functionalColor).substring( 1, 3 ), 16 ),
+                Integer.valueOf(("#" + config.functionalColor).substring( 3, 5 ), 16 ),
+                Integer.valueOf(("#" + config.functionalColor).substring( 5, 7 ), 16 ));
+
+        oreColor = new Vec3d(oreColorHex.getRed(), oreColorHex.getGreen(), oreColorHex.getBlue());
+        functionalColor = new Vec3d(functionalColorHex.getRed(), functionalColorHex.getGreen(), functionalColorHex.getBlue());
+        defaultColor = new Vec3d(254, 254, 254);
+    }
 
     static {
         loadBlockData();
+        resetColors();
     }
 
     static void getBlockID(String blockID) {
@@ -76,7 +95,6 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
     }
 
     private final Quaternionf rotation;
-    BoDaRConfig config = BoDaRConfig.get();
     protected WhiteDotParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Direction direction) {
         super(world, x, y, z, velocityX, velocityY, velocityZ);
         this.scale = config.particleSize;
