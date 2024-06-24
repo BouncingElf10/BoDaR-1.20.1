@@ -1,9 +1,7 @@
-Color detect config menu
+Color hex bug
 
-More BoDaR modes
+rewrite raycast code
 
 particles away from you should delete
 
 toggleable black textures for blocks
-
-Nice settings menu *

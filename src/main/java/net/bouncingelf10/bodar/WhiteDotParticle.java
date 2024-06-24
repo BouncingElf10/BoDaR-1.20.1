@@ -1,10 +1,14 @@
 package net.bouncingelf10.bodar;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -15,12 +19,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
-import me.shedaniel.math.Color;
 
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 
@@ -39,17 +43,31 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
 
 
     static void resetColors() {
-        Color oreColorHex = Color.ofRGB(Integer.valueOf(("#" + config.oreColor).substring( 1, 3 ), 16 ),
-                Integer.valueOf(("#" + config.oreColor).substring( 3, 5 ), 16 ),
-                Integer.valueOf(("#" + config.oreColor).substring( 5, 7 ), 16 ));
-
-        Color functionalColorHex = Color.ofRGB(Integer.valueOf(("#" + config.functionalColor).substring( 1, 3 ), 16 ),
-                Integer.valueOf(("#" + config.functionalColor).substring( 3, 5 ), 16 ),
-                Integer.valueOf(("#" + config.functionalColor).substring( 5, 7 ), 16 ));
+        Color oreColorHex = parseColor(String.valueOf(config.oreColor));
+        Color functionalColorHex = parseColor(String.valueOf(config.functionalColor));
 
         oreColor = new Vec3d(oreColorHex.getRed(), oreColorHex.getGreen(), oreColorHex.getBlue());
         functionalColor = new Vec3d(functionalColorHex.getRed(), functionalColorHex.getGreen(), functionalColorHex.getBlue());
         defaultColor = new Vec3d(254, 254, 254);
+    }
+
+    static Color parseColor(String colorString) {
+        int colorValue = Integer.parseInt(colorString);
+
+        // Convert integer to hexadecimal string
+        String hex = Integer.toHexString(colorValue);
+
+        // Ensure the hex string is formatted correctly to 6 characters
+        while (hex.length() < 6) {
+            hex = "0" + hex;
+        }
+
+        // Extract RGB components from the hex string
+        int r = Integer.parseInt(hex.substring(0, 2), 16);
+        int g = Integer.parseInt(hex.substring(2, 4), 16);
+        int b = Integer.parseInt(hex.substring(4, 6), 16);
+
+        return new Color(r, g, b);
     }
 
     static {
