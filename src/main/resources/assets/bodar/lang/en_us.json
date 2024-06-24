@@ -2,6 +2,7 @@
   "key.bodar.example": "Use BoDaR",
   "key.bodar.open_config": "Open BoDaR Config Menu",
   "category.bodar.main": "BoDaR",
+  "tkext.autoconfig.bodar.title": "BoDaR Config Menu",
   "text.autoconfig.bodar.option.isOn": "Active",
   "text.autoconfig.bodar.option.isOn.@Tooltip": "If the mod is active or not",
   "text.autoconfig.bodar.option.size": "Size",
@@ -13,5 +14,9 @@
   "text.autoconfig.bodar.option.maxAge": "Max Age",
   "text.autoconfig.bodar.option.maxAge.@Tooltip": "Maximum age of of the particles",
   "text.autoconfig.bodar.option.particleSize": "Particle Size",
-  "text.autoconfig.bodar.option.particleSize.@Tooltip": "How big the particles are"
+  "text.autoconfig.bodar.option.particleSize.@Tooltip": "How big the particles are",
+  "text.autoconfig.bodar.option.oreColor": "Ore Colors",
+  "text.autoconfig.bodar.option.oreColor.@Tooltip": "Color of particles when the hit a ore",
+  "text.autoconfig.bodar.option.functionalColor": "Functional Blocks Color",
+  "text.autoconfig.bodar.option.functionalColor.@Tooltip": "Color of particles when the hit a functional blocks (eg. furnace)"
 }
