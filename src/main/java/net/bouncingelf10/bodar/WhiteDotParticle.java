@@ -11,29 +11,71 @@ import net.minecraft.util.math.Vec3d;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import java.util.Objects;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Set;
 
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 
 public class WhiteDotParticle extends SpriteBillboardParticle {
 
     static String blockIDString;
+    static Vec3d colorBlockID;
+
+    private static final Set<String> ores = new HashSet<>();
+    private static final Set<String> functional = new HashSet<>();
+    private static final Vec3d oreColor = new Vec3d(31, 145, 9);
+    private static final Vec3d functionalColor = new Vec3d(224, 167, 9);
+    private static final Vec3d defaultColor = new Vec3d(254, 254, 254);
+
+    static {
+        loadBlockData();
+    }
+
     static void getBlockID(String blockID) {
         blockIDString = blockID;
-        //LOGGER.info(blockIDString);
-        if (Objects.equals(blockIDString, "minecraft:diamond_ore") || Objects.equals(blockIDString, "minecraft:deepslate_diamond_ore")) {
-            colorBlockID = new Vec3d(31, 145, 9);
-        } else if (Objects.equals(blockIDString, "minecraft:furnace") || Objects.equals(blockIDString, "minecraft:crafting_table")) {
-            colorBlockID = new Vec3d(224, 167, 9);
-        } else {
-            colorBlockID = new Vec3d(254,254,254);
+        colorBlockID = getColorBlockID(blockIDString);
+    }
+
+    private static void loadBlockData() {
+        try (InputStream inputStream = WhiteDotParticle.class.getResourceAsStream("/assets/bodar/blocks.json")) {
+            if (inputStream == null) {
+                LOGGER.warn("Resource not found: /assets/bodar/blocks.json");
+                throw new IOException("Resource not found: /assets/bodar/blocks.json");
+            }
+            JsonObject jsonObject = JsonParser.parseReader(new InputStreamReader(inputStream)).getAsJsonObject();
+            JsonArray oresArray = jsonObject.getAsJsonArray("ores");
+            JsonArray functionalArray = jsonObject.getAsJsonArray("functional");
+
+            for (int i = 0; i < oresArray.size(); i++) {
+                ores.add(oresArray.get(i).getAsString());
+            }
+
+            for (int i = 0; i < functionalArray.size(); i++) {
+                functional.add(functionalArray.get(i).getAsString());
+            }
+        } catch (IOException e) {
+            LOGGER.warn(String.valueOf(e));
         }
+    }
 
-
+    public static Vec3d getColorBlockID(String blockIDString) {
+        if (ores.contains(blockIDString)) {
+            return oreColor;
+        } else if (functional.contains(blockIDString)) {
+            return functionalColor;
+        } else {
+            return defaultColor;
+        }
     }
 
     private final Quaternionf rotation;
-    static Vec3d colorBlockID;
     BoDaRConfig config = BoDaRConfig.get();
     protected WhiteDotParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Direction direction) {
         super(world, x, y, z, velocityX, velocityY, velocityZ);
