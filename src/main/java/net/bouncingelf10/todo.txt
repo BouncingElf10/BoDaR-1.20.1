@@ -1,6 +1,9 @@
-Color hex bug
 
-rewrite raycast code
+rewrite ray cast code
+
+particles on a broking block should disappear
+
+entities plus water
 
 particles away from you should delete
 
