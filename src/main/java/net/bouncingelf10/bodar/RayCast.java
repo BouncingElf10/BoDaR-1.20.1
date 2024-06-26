@@ -3,88 +3,125 @@ package net.bouncingelf10.bodar;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.*;
 import net.minecraft.world.RaycastContext;
+import org.joml.Quaternionf;
+import org.joml.Quaternionfc;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
+import java.text.Normalizer;
+import java.util.logging.Logger;
 
+import static net.bouncingelf10.bodar.BoDaR.LOGGER;
+import static net.bouncingelf10.bodar.WhiteDotParticle.*;
 import static net.bouncingelf10.bodar.WhiteDotParticle.Factory.setDirection;
-import static net.bouncingelf10.bodar.WhiteDotParticle.getBlockID;
+import static net.bouncingelf10.bodar.WhiteDotParticle.Factory.side;
 
 public class RayCast {
-    public static void rayCast(float offsetX, float offsetY) {
-        // Get the Minecraft client instance
+    public static void rayCast(float xPixel, float yPixel) {
+
         MinecraftClient client = MinecraftClient.getInstance();
+        double maxReach = 16; // The farthest target the cameraEntity can detect
+        float tickDelta = 1.0F; // Used for tracking animation progress; no tracking is 1.0F
+        boolean includeFluids = true; // Whether to detect fluids as blocks
 
-        // Check if the client player is available
-        if (client.player != null && client.world != null) {
-            // Get the player's current rotation (pitch and yaw) and position
-            float pitch = client.player.getPitch(1.0F);
-            float yaw = client.player.getYaw(1.0F);
-            Vec3d headLocation = client.player.getCameraPosVec(1.0F);
+        if (client.cameraEntity != null && client.world != null) {
+            Vec3d cameraPos = client.cameraEntity.getCameraPosVec(tickDelta);
+            Vec3d screenVec = getWorldCoordsFromScreenCoords(client, xPixel, yPixel, cameraPos, maxReach, tickDelta);
 
-            // Convert viewport offsets to world offsets based on player's view direction
-            double reachDistance = 16.0; // Reach distance
+            HitResult hit = client.world.raycast(new RaycastContext(cameraPos, screenVec, RaycastContext.ShapeType.OUTLINE, includeFluids ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE, client.cameraEntity));
 
-            // Calculate the direction vector
-            double deltaX = -Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
-            double deltaY = -Math.sin(Math.toRadians(pitch));
-            double deltaZ = Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
+            switch(hit.getType()) {
+                case MISS:
+                    // nothing near enough
+                    break;
+                case BLOCK:
+                    BlockHitResult blockHit = (BlockHitResult) hit;
+                    setDirection(blockHit.getSide());
 
+                    BlockState blockState = client.world.getBlockState(blockHit.getBlockPos());
+                    Block block = blockState.getBlock();
+                    Identifier blockId = Registries.BLOCK.getId(block);
 
-            // Create right and up vectors for the player's view direction
-            Vec3d rightVec = new Vec3d(-Math.cos(Math.toRadians(yaw)), 0, -Math.sin(Math.toRadians(yaw))).normalize();
+                    getBlockID(String.valueOf(blockId));
 
-            Vec3d upVec;
-            if (client.player.getPitch() >= 65 || client.player.getPitch() <= -65) {
-                if (client.player.getHorizontalFacing() == Direction.WEST || client.player.getHorizontalFacing() == Direction.EAST) {
-                    upVec = new Vec3d(1, 0, 0);
-                } else {
-                    upVec = new Vec3d(0, 0, 1);
-                }
-            } else {
-                upVec = new Vec3d(0, 1, 0);
-            }
-
-            // Apply offsets in screen space
-            Vec3d adjustedLocation = headLocation.add(rightVec.multiply(offsetX)).add(upVec.multiply(offsetY));
-            Vec3d direction = new Vec3d(deltaX, deltaY, deltaZ).normalize().multiply(reachDistance);
-
-            // Perform a raycast from the adjusted head location
-            Vec3d target = adjustedLocation.add(direction);
-            BlockHitResult result = client.world.raycast(new RaycastContext(headLocation, target, RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, client.player));
-            // Handle raycast result
-            if (result.getType() == BlockHitResult.Type.BLOCK) {
-                Vec3d hitVec = result.getPos();
-
-                // Convert BlockPos to float coordinates
-                float hitX = (float) hitVec.x;
-                float hitY = (float) hitVec.y;
-                float hitZ = (float) hitVec.z;
-
-                //LOGGER.info("Ray hit block at {}, {}, {}", hitX, hitY, hitZ);
-                BlockState blockState = world.getBlockState(result.getBlockPos());
-                Block block = blockState.getBlock();
-                Identifier blockId = Registries.BLOCK.getId(block);
-
-                getBlockID(String.valueOf(blockId));
-                //LOGGER.info("Block: {}", blockId);
-
-                setDirection(result.getSide());
-                spawnParticle(hitX, hitY, hitZ, result.getSide());
+                    spawnParticle((float) blockHit.getPos().x, (float) blockHit.getPos().y, (float) blockHit.getPos().z, blockHit.getSide());
+                    break;
+                case ENTITY:
+                    EntityHitResult entityHit = (EntityHitResult) hit;
+                    setDirection(Direction.UP);
+                    getBlockID("minecraft:entity");
+                    spawnParticle((float) entityHit.getPos().x, (float) entityHit.getPos().y, (float) entityHit.getPos().z, Direction.UP);
+                    break;
             }
         }
     }
 
-    static ClientWorld world = MinecraftClient.getInstance().world;
+    private static Vec3d getWorldCoordsFromScreenCoords(MinecraftClient client, float xPixel, float yPixel, Vec3d cameraPos, double maxReach, float tickDelta) {
+        int width = client.getWindow().getScaledWidth();
+        int height = client.getWindow().getScaledHeight();
 
+        Vector3f cameraDirection = client.cameraEntity.getRotationVec(tickDelta).toVector3f();
+        double fov = client.options.getFov().getValue();
+
+
+        Vector3f verticalRotationAxis = new Vector3f(cameraDirection);
+        verticalRotationAxis.cross(new Vector3f(0, 1, 0)); // POSITIVE_Y
+        verticalRotationAxis.normalize();
+
+        Vector3f horizontalRotationAxis = new Vector3f((Vector3fc) cameraDirection);
+        horizontalRotationAxis.cross(verticalRotationAxis);
+        horizontalRotationAxis.normalize();
+
+        Vec3d direction = map(fov, cameraDirection, horizontalRotationAxis, verticalRotationAxis, xPixel, yPixel, width, height);
+        return cameraPos.add(direction.multiply(maxReach));
+    }
+
+    private static Vec3d map(double fov, Vector3f center, Vector3f horizontalRotationAxis,
+                             Vector3f verticalRotationAxis, float x, float y, int width, int height) {
+        /*
+        double angleSizeY = fov / height;
+        double angleSizeX = fov / width;
+
+        float horizontalRotation = (float) ((width - x) * angleSizeX);
+        float verticalRotation = (float) ((height - y) * angleSizeY);
+
+        LOGGER.info("horizontalRotation: ({} - {} / 2f) * {};", x, width, angleSizeX);
+        LOGGER.info("= " + horizontalRotation);
+        LOGGER.info("verticalRotation: ({} - {} / 2f) * {};", y, height, angleSizeY);
+        LOGGER.info("= " + verticalRotation);
+
+        //float horizontalRotation = 1f;
+        //float verticalRotation = 0f;
+
+        // Create a temporary Vector3f based on center
+        */
+        Vector3f temp = new Vector3f(center);
+        /*
+        Quaternionf horizontalRotationQuat = new Quaternionf().rotationAxis(horizontalRotation, horizontalRotationAxis);
+        horizontalRotationQuat.normalize(); // Ensure quaternion is normalized
+        horizontalRotationQuat.transform(temp);
+
+        Quaternionf verticalRotationQuat = new Quaternionf().rotationAxis(verticalRotation, verticalRotationAxis);
+        verticalRotationQuat.normalize(); // Ensure quaternion is normalized
+        verticalRotationQuat.transform(temp);
+        */
+        return new Vec3d(temp.x, temp.y, temp.z);
+    }
+
+
+    static ClientWorld world = MinecraftClient.getInstance().world;
 
     public static void spawnParticle(float hitX, float hitY, float hitZ, Direction direction) {
         if (world != null) {
-            //LOGGER.info("Spawning Particle at: {}, {}, {}", hitX, hitY, hitZ);
+            // LOGGER.info("Spawning Particle at: {}, {}, {}", hitX, hitY, hitZ);
             switch (direction) {
                 case UP -> world.addParticle(BoDaR.WhiteDotParticle, hitX, hitY + 0.0001, hitZ, 0, 0, 0);
                 case DOWN -> world.addParticle(BoDaR.WhiteDotParticle, hitX, hitY - 0.0001, hitZ, 0, 0, 0);
@@ -93,7 +130,6 @@ public class RayCast {
                 case SOUTH -> world.addParticle(BoDaR.WhiteDotParticle, hitX, hitY, hitZ + 0.0001, 0, 0, 0);
                 case WEST -> world.addParticle(BoDaR.WhiteDotParticle, hitX - 0.0001, hitY, hitZ, 0, 0, 0);
             }
-
         }
     }
 }
