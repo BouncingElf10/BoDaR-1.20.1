@@ -23,7 +23,7 @@ public class BoDaRClient implements ClientModInitializer {
 
         BoDaRConfig config = BoDaRConfig.get();
             ClientTickEvents.END_CLIENT_TICK.register(client -> {
-                if (ModKeyBindings.RKeyBinding.isPressed()) {
+                if (ModKeyBindings.RKeyBinding.wasPressed()) {
                     if (config.isOn) {
                         LOGGER.info("R pressed");
                         loadBlockData();
@@ -31,16 +31,17 @@ public class BoDaRClient implements ClientModInitializer {
                         Window window = client.getWindow();
                         //LOGGER.info("Screen Resolution: {}, {}", window.getWidth(), window.getHeight());
                         var size = config.size;
+                        var density = config.density;
                         var randomness = config.randomness;
                         var width = window.getWidth() / size;
-                        var height = window.getHeight() / size;
+                        var height = window.getHeight() /size;
 
-                        for (var i = height / 2 * -1; i <= (height / 2); i++) {
-                            for (var j = width / 2 * -1; j <= (width / 2); j++) {
+                        for (var i = 0; i <= height; i = i + density) {
+                            for (var j = 0; j <= width; j = j + density) {
                                 float xOffset = (float) (j + Math.random() * (2 * randomness) - randomness);
                                 float yOffset = (float) (i + Math.random() * (2 * randomness) - randomness);
                                 //LOGGER.info("New Offset: {}, {}", xOffset, yOffset);
-                                rayCast(xOffset, yOffset);
+                                rayCast(j, i);
                             }
                         }
                     }

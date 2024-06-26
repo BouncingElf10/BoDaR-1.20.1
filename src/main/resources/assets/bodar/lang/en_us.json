@@ -7,6 +7,8 @@
   "text.autoconfig.bodar.option.isOn.@Tooltip": "If the mod is active or not",
   "text.autoconfig.bodar.option.size": "Size",
   "text.autoconfig.bodar.option.size.@Tooltip": "How big the area is of the BoDaR beam",
+  "text.autoconfig.bodar.option.density": "Density",
+  "text.autoconfig.bodar.option.density.@Tooltip": "How dense the beams are (more dense = more particles = less performance",
   "text.autoconfig.bodar.option.randomness": "Randomness",
   "text.autoconfig.bodar.option.randomness.@Tooltip": "How spread out the dots are",
   "text.autoconfig.bodar.option.randomRotation": "Random Rotation",
