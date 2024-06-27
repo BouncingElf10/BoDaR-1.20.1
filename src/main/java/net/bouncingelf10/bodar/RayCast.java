@@ -13,22 +13,20 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.*;
 import net.minecraft.world.RaycastContext;
 import org.joml.Quaternionf;
-import org.joml.Quaternionfc;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
-import java.text.Normalizer;
-import java.util.logging.Logger;
+
 
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 import static net.bouncingelf10.bodar.WhiteDotParticle.*;
 import static net.bouncingelf10.bodar.WhiteDotParticle.Factory.setDirection;
-import static net.bouncingelf10.bodar.WhiteDotParticle.Factory.side;
+
 
 public class RayCast {
     public static void rayCast(float xPixel, float yPixel) {
 
         MinecraftClient client = MinecraftClient.getInstance();
-        double maxReach = 16; // The farthest target the cameraEntity can detect
+        double maxReach = config.reach; // The farthest target the cameraEntity can detect
         float tickDelta = 1.0F; // Used for tracking animation progress; no tracking is 1.0F
         boolean includeFluids = true; // Whether to detect fluids as blocks
 
@@ -56,17 +54,15 @@ public class RayCast {
                     break;
                 case ENTITY:
                     EntityHitResult entityHit = (EntityHitResult) hit;
-                    setDirection(Direction.UP);
-                    getBlockID("minecraft:entity");
-                    spawnParticle((float) entityHit.getPos().x, (float) entityHit.getPos().y, (float) entityHit.getPos().z, Direction.UP);
+                    LOGGER.info("Hit enitity: {}", entityHit.getEntity().getEntityName());
                     break;
             }
         }
     }
 
     private static Vec3d getWorldCoordsFromScreenCoords(MinecraftClient client, float xPixel, float yPixel, Vec3d cameraPos, double maxReach, float tickDelta) {
-        int width = client.getWindow().getScaledWidth();
-        int height = client.getWindow().getScaledHeight();
+
+        assert client.cameraEntity != null; //IDK if it isn't but meh will this really effect me
 
         Vector3f cameraDirection = client.cameraEntity.getRotationVec(tickDelta).toVector3f();
         double fov = client.options.getFov().getValue();
@@ -80,31 +76,18 @@ public class RayCast {
         horizontalRotationAxis.cross(verticalRotationAxis);
         horizontalRotationAxis.normalize();
 
-        Vec3d direction = map(fov, cameraDirection, horizontalRotationAxis, verticalRotationAxis, xPixel, yPixel, width, height);
+        Vec3d direction = map(fov, cameraDirection, horizontalRotationAxis, verticalRotationAxis, xPixel, yPixel);
         return cameraPos.add(direction.multiply(maxReach));
     }
 
     private static Vec3d map(double fov, Vector3f center, Vector3f horizontalRotationAxis,
-                             Vector3f verticalRotationAxis, float x, float y, int width, int height) {
-        /*
-        double angleSizeY = fov / height;
-        double angleSizeX = fov / width;
+                             Vector3f verticalRotationAxis, float x, float y) {
 
-        float horizontalRotation = (float) ((width - x) * angleSizeX);
-        float verticalRotation = (float) ((height - y) * angleSizeY);
-
-        LOGGER.info("horizontalRotation: ({} - {} / 2f) * {};", x, width, angleSizeX);
-        LOGGER.info("= " + horizontalRotation);
-        LOGGER.info("verticalRotation: ({} - {} / 2f) * {};", y, height, angleSizeY);
-        LOGGER.info("= " + verticalRotation);
-
-        //float horizontalRotation = 1f;
-        //float verticalRotation = 0f;
-
-        // Create a temporary Vector3f based on center
-        */
+        float horizontalRotation = (float) (x * fov / 1000); //30 -> 0.03
+        float verticalRotation = (float) (y * fov / 1000); //120 -> 0.12
+        LOGGER.info("horizontalRotation: {}, verticalRotation: {}", horizontalRotation, verticalRotation);
         Vector3f temp = new Vector3f(center);
-        /*
+
         Quaternionf horizontalRotationQuat = new Quaternionf().rotationAxis(horizontalRotation, horizontalRotationAxis);
         horizontalRotationQuat.normalize(); // Ensure quaternion is normalized
         horizontalRotationQuat.transform(temp);
@@ -112,7 +95,7 @@ public class RayCast {
         Quaternionf verticalRotationQuat = new Quaternionf().rotationAxis(verticalRotation, verticalRotationAxis);
         verticalRotationQuat.normalize(); // Ensure quaternion is normalized
         verticalRotationQuat.transform(temp);
-        */
+
         return new Vec3d(temp.x, temp.y, temp.z);
     }
 

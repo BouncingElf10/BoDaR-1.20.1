@@ -13,13 +13,16 @@ public class BoDaRConfig implements ConfigData {
     public boolean isOn = true;
 
     @ConfigEntry.Gui.Tooltip
-    public int size = 60;
+    public double size = 5.0;
 
     @ConfigEntry.Gui.Tooltip
-    public int density = 10;
+    public double density = 1.0;
 
     @ConfigEntry.Gui.Tooltip
-    public double randomness = 1;
+    public double randomness = 1.0;
+
+    @ConfigEntry.Gui.Tooltip
+    public int reach = 24;
 
     @ConfigEntry.Gui.Tooltip
     public boolean randomRotation = true;
