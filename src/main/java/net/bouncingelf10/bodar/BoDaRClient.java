@@ -3,7 +3,6 @@ package net.bouncingelf10.bodar;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.minecraft.client.util.Window;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,25 +22,22 @@ public class BoDaRClient implements ClientModInitializer {
 
         BoDaRConfig config = BoDaRConfig.get();
             ClientTickEvents.END_CLIENT_TICK.register(client -> {
-                if (ModKeyBindings.RKeyBinding.wasPressed()) {
+                if (ModKeyBindings.RKeyBinding.isPressed()) {
                     if (config.isOn) {
                         LOGGER.info("R pressed");
                         loadBlockData();
                         resetColors();
-                        Window window = client.getWindow();
                         //LOGGER.info("Screen Resolution: {}, {}", window.getWidth(), window.getHeight());
                         var size = config.size;
                         var density = config.density;
                         var randomness = config.randomness;
-                        var width = window.getWidth() / size;
-                        var height = window.getHeight() /size;
 
-                        for (var i = 0; i <= height; i = i + density) {
-                            for (var j = 0; j <= width; j = j + density) {
-                                float xOffset = (float) (j + Math.random() * (2 * randomness) - randomness);
-                                float yOffset = (float) (i + Math.random() * (2 * randomness) - randomness);
+                        for (double i = size * -1; i <= size; i = i + density) {
+                            for (double j = size * -1; j <= size; j = j + density) {
+                                float xOffset = (float) (j + Math.random() / randomness);
+                                float yOffset = (float) (i + Math.random() / randomness);
                                 //LOGGER.info("New Offset: {}, {}", xOffset, yOffset);
-                                rayCast(j, i);
+                                rayCast(xOffset, yOffset);
                             }
                         }
                     }
