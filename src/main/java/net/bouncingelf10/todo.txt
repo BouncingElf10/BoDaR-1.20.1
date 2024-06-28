@@ -1,4 +1,3 @@
-double sided particles
 
 water should get a color + should behaviour correctly if under the water
 
@@ -8,4 +7,4 @@ entities plus water
 
 particles away from you should delete
 
-toggleable black textures for blocks
+toggleable black / invis textures for blocks
