@@ -191,6 +191,8 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         vertexConsumer.vertex(vertices[3].x, vertices[3].y, vertices[3].z).texture(maxU, maxV).color(this.red, this.green, this.blue, this.alpha).light(light).next();
     }
 
+    private final int randomRotation = random.nextInt(360);
+
     @Override
     public void tick() {
         super.tick();
@@ -238,28 +240,58 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
                 case "x":
                     if (x > 0) {
                         //System.out.println("Object 2 is to the east of Object 1");
-                        this.rotation = new Quaternionf().rotateY((float) Math.toRadians(-90));
+                        if (config.randomRotation) {
+                            this.rotation = new Quaternionf().rotateY((float) Math.toRadians(-90))
+                                                             .rotateZ((float) Math.toRadians(randomRotation));
+                        } else {
+                            this.rotation = new Quaternionf().rotateY((float) Math.toRadians(-90));
+                        }
                     } else if (x < 0) {
                         //System.out.println("Object 2 is to the west of Object 1");
-                        this.rotation = new Quaternionf().rotateY((float) Math.toRadians(90));
+                        if (config.randomRotation) {
+                            this.rotation = new Quaternionf().rotateY((float) Math.toRadians(90))
+                                                             .rotateZ((float) Math.toRadians(randomRotation));
+                        } else {
+                            this.rotation = new Quaternionf().rotateY((float) Math.toRadians(90));
+                        }
                     }
                     break;
                 case "y":
                     if (y > 0) {
                         //System.out.println("Object 2 is above Object 1");
-                        this.rotation = new Quaternionf().rotateX((float) Math.toRadians(90));
+                        if (config.randomRotation) {
+                            this.rotation = new Quaternionf().rotateX((float) Math.toRadians(90))
+                                                             .rotateZ((float) Math.toRadians(randomRotation));
+                        } else {
+                            this.rotation = new Quaternionf().rotateX((float) Math.toRadians(90));
+                        }
                     } else if (y < 0) {
                         //System.out.println("Object 2 is below Object 1");
-                        this.rotation = new Quaternionf().rotateX((float) Math.toRadians(-90));
+                        if (config.randomRotation) {
+                            this.rotation = new Quaternionf().rotateX((float) Math.toRadians(-90))
+                                                             .rotateZ((float) Math.toRadians(randomRotation));
+                        } else {
+                            this.rotation = new Quaternionf().rotateX((float) Math.toRadians(-90));
+                        }
                     }
                     break;
                 case "z":
                     if (z > 0) {
                         //System.out.println("Object 2 is to the south of Object 1");
-                        this.rotation = new Quaternionf().rotateY((float) Math.toRadians(180));
+                        if (config.randomRotation) {
+                            this.rotation = new Quaternionf().rotateY((float) Math.toRadians(180))
+                                                             .rotateZ((float) Math.toRadians(randomRotation));
+                        } else {
+                            this.rotation = new Quaternionf().rotateY((float) Math.toRadians(180));
+                        }
                     } else if (z < 0) {
                         //System.out.println("Object 2 is to the north of Object 1");
-                        this.rotation = new Quaternionf().rotateY((float) Math.toRadians(0));
+                        if (config.randomRotation) {
+                            this.rotation = new Quaternionf().rotateY((float) Math.toRadians(0))
+                                                             .rotateZ((float) Math.toRadians(randomRotation));
+                        } else {
+                            this.rotation = new Quaternionf().rotateY((float) Math.toRadians(0));
+                        }
                     }
                     break;
         }
