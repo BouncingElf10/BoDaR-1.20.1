@@ -28,6 +28,9 @@ public class BoDaRConfig implements ConfigData {
     public boolean randomRotation = true;
 
     @ConfigEntry.Gui.Tooltip
+    public boolean doubleSided = true;
+
+    @ConfigEntry.Gui.Tooltip
     public int maxAge = 400;
 
     @ConfigEntry.Gui.Tooltip
