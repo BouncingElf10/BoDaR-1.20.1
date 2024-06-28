@@ -1,3 +1,4 @@
+presets for performance (dense, medium, sparse)
 
 water should get a color + should behaviour correctly if under the water
 
