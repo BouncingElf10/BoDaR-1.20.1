@@ -194,10 +194,14 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
     public void tick() {
         super.tick();
         float lifespan = (float) (maxAge * 0.95 - (Math.random() / 10));  // Calculate 95% of the maxAge
-        if (age >= lifespan) {
-            this.alpha = 1 - ((age - lifespan) / (maxAge - lifespan));
+        if (config.isOn) {
+            if (age >= lifespan) {
+                this.alpha = 1 - ((age - lifespan) / (maxAge - lifespan));
+            } else {
+                this.alpha = 1;
+            }
         } else {
-            this.alpha = 1;
+            this.dead = true;
         }
     }
 
