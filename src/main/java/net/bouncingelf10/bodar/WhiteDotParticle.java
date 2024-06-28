@@ -1,5 +1,6 @@
 package net.bouncingelf10.bodar;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.VertexConsumer;
@@ -29,7 +30,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
     static String blockIDString;
     static Vec3d colorBlockID;
     static BoDaRConfig config = BoDaRConfig.get();
-
+    MinecraftClient client = MinecraftClient.getInstance();
     private static final Set<String> ores = new HashSet<>();
     private static final Set<String> functional = new HashSet<>();
 
@@ -202,6 +203,59 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
             }
         } else {
             this.dead = true;
+        }
+
+        //face the direction the player is in, so it works with transparent blocks
+
+        assert client.player != null; //This won't have any consequences...
+        Vec3d pos1 = client.player.getCameraPosVec(1f);
+        Vec3d pos2 = new Vec3d(this.x, this.y, this.z);
+
+        Vec3d relativePos = pos1.subtract(pos2);
+
+        Vector3f forward = new Vector3f(0, 0, 1);
+
+        Vector3f rotatedForward = this.rotation.transform(new Vector3f(forward));
+
+        double absX = Math.abs(rotatedForward.x);
+        double absY = Math.abs(rotatedForward.y);
+        double absZ = Math.abs(rotatedForward.z);
+
+        String primaryAxis;
+        if (absZ > absX && absZ > absY) {
+            primaryAxis = "z";
+        } else if (absX > absY) {
+            primaryAxis = "x";
+        } else {
+            primaryAxis = "y";
+        }
+
+        double x = relativePos.x;
+        double y = relativePos.y;
+        double z = relativePos.z;
+
+        switch (primaryAxis) {
+            case "x":
+                if (x > 0) {
+                    System.out.println("Object 2 is to the east of Object 1");
+                } else if (x < 0) {
+                    System.out.println("Object 2 is to the west of Object 1");
+                }
+                break;
+            case "y":
+                if (y > 0) {
+                    System.out.println("Object 2 is above Object 1");
+                } else if (y < 0) {
+                    System.out.println("Object 2 is below Object 1");
+                }
+                break;
+            case "z":
+                if (z > 0) {
+                    System.out.println("Object 2 is to the south of Object 1");
+                } else if (z < 0) {
+                    System.out.println("Object 2 is to the north of Object 1");
+                }
+                break;
         }
     }
 

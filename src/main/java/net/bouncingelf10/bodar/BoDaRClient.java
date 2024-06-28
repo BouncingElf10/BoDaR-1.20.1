@@ -22,7 +22,7 @@ public class BoDaRClient implements ClientModInitializer {
 
         BoDaRConfig config = BoDaRConfig.get();
             ClientTickEvents.END_CLIENT_TICK.register(client -> {
-                if (ModKeyBindings.RKeyBinding.isPressed()) {
+                if (ModKeyBindings.RKeyBinding.wasPressed()) {
                     if (config.isOn) {
                         LOGGER.info("R pressed");
                         loadBlockData();
@@ -31,13 +31,13 @@ public class BoDaRClient implements ClientModInitializer {
                         var size = config.size;
                         var density = config.density;
                         var randomness = config.randomness;
-
+                        rayCast(0,0);
                         for (double i = size * -1; i <= size; i = i + density) {
                             for (double j = size * -1; j <= size; j = j + density) {
                                 float xOffset = (float) (j + Math.random() / randomness);
                                 float yOffset = (float) (i + Math.random() / randomness);
                                 //LOGGER.info("New Offset: {}, {}", xOffset, yOffset);
-                                rayCast(xOffset, yOffset);
+                                //rayCast(xOffset, yOffset);
                             }
                         }
                     }
