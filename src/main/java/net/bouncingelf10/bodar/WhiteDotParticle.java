@@ -1,14 +1,14 @@
 package net.bouncingelf10.bodar;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.*;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
+import static net.bouncingelf10.bodar.RayCast.hit;
 
 public class WhiteDotParticle extends SpriteBillboardParticle {
 
@@ -77,7 +78,6 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
 
     static void getBlockID(String blockID) {
         blockIDString = blockID;
-        LOGGER.info(blockIDString);
         colorBlockID = getColorBlockID(blockIDString);
     }
 
@@ -121,14 +121,16 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         }
     }
 
+    private final BlockPos initialBlockPos;
     private Quaternionf rotation;
-    protected WhiteDotParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Direction direction) {
+    protected WhiteDotParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Direction direction, BlockPos blockPos) {
         super(world, x, y, z, velocityX, velocityY, velocityZ);
         this.scale = config.particleSize;
         this.maxAge = config.maxAge;
         this.setVelocity(velocityX, velocityY, velocityZ);
         this.rotation = getRotationQuaternion(direction);
         this.setColor((float) ((float) 255 - colorBlockID.x), (float) ((float) 255 - colorBlockID.y), (float) ((float) 255 - colorBlockID.z));
+        this.initialBlockPos = blockPos;
     }
 
     private float getScale() {
@@ -208,6 +210,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
     @Override
     public void tick() {
         super.tick();
+
         float lifespan = (float) (maxAge * 0.95 - (Math.random() / 10));  // Calculate 95% of the maxAge
         if (config.isOn) {
             if (age >= lifespan) {
@@ -216,7 +219,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
                 this.alpha = 1;
             }
         } else {
-            this.dead = true;
+            this.markDead();
         }
 
         if (config.doubleSided) {
@@ -252,18 +255,16 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
             switch (primaryAxis) {
                 case "x":
                     if (x > 0) {
-                        //System.out.println("Object 2 is to the east of Object 1");
                         if (config.randomRotation) {
                             this.rotation = new Quaternionf().rotateY((float) Math.toRadians(-90))
-                                                             .rotateZ((float) Math.toRadians(randomRotation));
+                                    .rotateZ((float) Math.toRadians(randomRotation));
                         } else {
                             this.rotation = new Quaternionf().rotateY((float) Math.toRadians(-90));
                         }
                     } else if (x < 0) {
-                        //System.out.println("Object 2 is to the west of Object 1");
                         if (config.randomRotation) {
                             this.rotation = new Quaternionf().rotateY((float) Math.toRadians(90))
-                                                             .rotateZ((float) Math.toRadians(randomRotation));
+                                    .rotateZ((float) Math.toRadians(randomRotation));
                         } else {
                             this.rotation = new Quaternionf().rotateY((float) Math.toRadians(90));
                         }
@@ -271,18 +272,16 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
                     break;
                 case "y":
                     if (y > 0) {
-                        //System.out.println("Object 2 is above Object 1");
                         if (config.randomRotation) {
                             this.rotation = new Quaternionf().rotateX((float) Math.toRadians(90))
-                                                             .rotateZ((float) Math.toRadians(randomRotation));
+                                    .rotateZ((float) Math.toRadians(randomRotation));
                         } else {
                             this.rotation = new Quaternionf().rotateX((float) Math.toRadians(90));
                         }
                     } else if (y < 0) {
-                        //System.out.println("Object 2 is below Object 1");
                         if (config.randomRotation) {
                             this.rotation = new Quaternionf().rotateX((float) Math.toRadians(-90))
-                                                             .rotateZ((float) Math.toRadians(randomRotation));
+                                    .rotateZ((float) Math.toRadians(randomRotation));
                         } else {
                             this.rotation = new Quaternionf().rotateX((float) Math.toRadians(-90));
                         }
@@ -290,24 +289,29 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
                     break;
                 case "z":
                     if (z > 0) {
-                        //System.out.println("Object 2 is to the south of Object 1");
                         if (config.randomRotation) {
                             this.rotation = new Quaternionf().rotateY((float) Math.toRadians(180))
-                                                             .rotateZ((float) Math.toRadians(randomRotation));
+                                    .rotateZ((float) Math.toRadians(randomRotation));
                         } else {
                             this.rotation = new Quaternionf().rotateY((float) Math.toRadians(180));
                         }
                     } else if (z < 0) {
-                        //System.out.println("Object 2 is to the north of Object 1");
                         if (config.randomRotation) {
                             this.rotation = new Quaternionf().rotateY((float) Math.toRadians(0))
-                                                             .rotateZ((float) Math.toRadians(randomRotation));
+                                    .rotateZ((float) Math.toRadians(randomRotation));
                         } else {
                             this.rotation = new Quaternionf().rotateY((float) Math.toRadians(0));
                         }
                     }
                     break;
+            }
         }
+
+        // Check the block state of the initial block position
+        BlockState blockState = this.world.getBlockState(this.initialBlockPos);
+        // Check if the block is air (indicating it has been broken)
+        if (blockState.isAir()) {
+            this.markDead();
         }
     }
 
@@ -326,10 +330,20 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
 
         @Override
         public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
-
             Direction direction = side; // Use the stored direction
-            WhiteDotParticle particle = new WhiteDotParticle(world, x, y, z, velocityX, velocityY, velocityZ, direction);
-            //LOGGER.info("Creating WhiteDotParticle at ({}, {}, {}) with velocity ({}, {}, {}) and direction ({})", x, y, z, velocityX, velocityY, velocityZ, side);
+            ///////////////////////////////////
+            BlockPos particlePos = null;
+            switch (hit.getType()) {
+                case MISS: break;
+                case ENTITY: break;
+                case BLOCK: {
+                    BlockHitResult blockHit = (BlockHitResult) hit;
+                    particlePos = blockHit.getBlockPos();
+                }
+            }
+            ///////////////////////////////////
+            BlockPos blockPos = particlePos; // Capture the block position
+            WhiteDotParticle particle = new WhiteDotParticle(world, x, y, z, velocityX, velocityY, velocityZ, direction, blockPos);
             particle.setSprite(this.spriteProvider);
             return particle;
         }
