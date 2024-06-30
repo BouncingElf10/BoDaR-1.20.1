@@ -207,15 +207,19 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
 
     private final int randomRotation = random.nextInt(360);
 
+    private boolean isFading;
+    private int fadeOutStart;
+    private int fadeOutDuration;
+
     @Override
     public void tick() {
         super.tick();
 
         float lifespan = (float) (maxAge * 0.95 - (Math.random() / 10));  // Calculate 95% of the maxAge
         if (config.isOn) {
-            if (age >= lifespan) {
+            if (age >= lifespan && !isFading) {
                 this.alpha = 1 - ((age - lifespan) / (maxAge - lifespan));
-            } else {
+            } else if (!isFading) {
                 this.alpha = 1;
             }
         } else {
@@ -310,8 +314,20 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         // Check the block state of the initial block position
         BlockState blockState = this.world.getBlockState(this.initialBlockPos);
         // Check if the block is air (indicating it has been broken)
-        if (blockState.isAir()) {
-            this.markDead();
+        if (blockState.isAir() && !isFading) {
+            isFading = true;
+            fadeOutStart = age; // Store the age when fading starts
+            fadeOutDuration = config.fadeOutTime; // Duration over which the particle will fade out (20 ticks)
+        }
+
+        // Handle fading out
+        if (isFading) {
+            int fadeOutProgress = age - fadeOutStart;
+            if (fadeOutProgress < fadeOutDuration) {
+                this.alpha = 1 - (float) fadeOutProgress / fadeOutDuration;
+            } else {
+                this.markDead();
+            }
         }
     }
 
@@ -334,8 +350,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
             ///////////////////////////////////
             BlockPos particlePos = null;
             switch (hit.getType()) {
-                case MISS: break;
-                case ENTITY: break;
+                case MISS, ENTITY: break;
                 case BLOCK: {
                     BlockHitResult blockHit = (BlockHitResult) hit;
                     particlePos = blockHit.getBlockPos();

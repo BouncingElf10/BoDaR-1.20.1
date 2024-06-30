@@ -34,6 +34,9 @@ public class BoDaRConfig implements ConfigData {
     public int maxAge = 400;
 
     @ConfigEntry.Gui.Tooltip
+    public int fadeOutTime = 20;
+
+    @ConfigEntry.Gui.Tooltip
     public float particleSize = 0.02f;
 
     @ConfigEntry.Gui.Tooltip
