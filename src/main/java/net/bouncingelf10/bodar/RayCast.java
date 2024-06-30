@@ -110,13 +110,14 @@ public class RayCast {
     public static void spawnParticle(float hitX, float hitY, float hitZ, Direction direction) {
         if (world != null) {
             // LOGGER.info("Spawning Particle at: {}, {}, {}", hitX, hitY, hitZ);
+
             switch (direction) {
-                case UP -> world.addParticle(BoDaR.WhiteDotParticle, hitX, hitY + 0.0001, hitZ, 0, 0, 0);
-                case DOWN -> world.addParticle(BoDaR.WhiteDotParticle, hitX, hitY - 0.0001, hitZ, 0, 0, 0);
-                case NORTH -> world.addParticle(BoDaR.WhiteDotParticle, hitX, hitY, hitZ - 0.0001, 0, 0, 0);
-                case EAST -> world.addParticle(BoDaR.WhiteDotParticle, hitX + 0.0001, hitY, hitZ, 0, 0, 0);
-                case SOUTH -> world.addParticle(BoDaR.WhiteDotParticle, hitX, hitY, hitZ + 0.0001, 0, 0, 0);
-                case WEST -> world.addParticle(BoDaR.WhiteDotParticle, hitX - 0.0001, hitY, hitZ, 0, 0, 0);
+                case UP -> world.addParticle(BoDaR.WhiteDotParticle, hitX, hitY + Math.random() / 1000, hitZ, 0, 0, 0);
+                case DOWN -> world.addParticle(BoDaR.WhiteDotParticle, hitX, hitY - Math.random() / 1000, hitZ, 0, 0, 0);
+                case NORTH -> world.addParticle(BoDaR.WhiteDotParticle, hitX, hitY, hitZ - Math.random() / 1000, 0, 0, 0);
+                case EAST -> world.addParticle(BoDaR.WhiteDotParticle, hitX + Math.random() / 1000, hitY, hitZ, 0, 0, 0);
+                case SOUTH -> world.addParticle(BoDaR.WhiteDotParticle, hitX, hitY, hitZ + Math.random() / 1000, 0, 0, 0);
+                case WEST -> world.addParticle(BoDaR.WhiteDotParticle, hitX - Math.random() / 1000, hitY, hitZ, 0, 0, 0);
             }
         }
     }
