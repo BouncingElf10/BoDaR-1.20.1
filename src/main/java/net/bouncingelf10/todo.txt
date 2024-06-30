@@ -1,10 +1,10 @@
-presets for performance (dense, medium, sparse)
-
-water should get a color + should behaviour correctly if under the water
-
 particles on a broking block should disappear
 
-entities plus water
+parties should appear under tha water
+
+presets for performance (dense, medium, sparse)
+
+entities.
 
 particles away from you should delete
 

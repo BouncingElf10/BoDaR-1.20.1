@@ -33,9 +33,11 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
     MinecraftClient client = MinecraftClient.getInstance();
     private static final Set<String> ores = new HashSet<>();
     private static final Set<String> functional = new HashSet<>();
+    private static final Set<String> water = new HashSet<>();
 
     static Vec3d oreColor;
     static Vec3d functionalColor;
+    static Vec3d waterColor;
     static Vec3d defaultColor;
 
 
@@ -45,6 +47,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
 
         oreColor = new Vec3d(oreColorHex.getRed(), oreColorHex.getGreen(), oreColorHex.getBlue());
         functionalColor = new Vec3d(functionalColorHex.getRed(), functionalColorHex.getGreen(), functionalColorHex.getBlue());
+        waterColor = new Vec3d(0, 0, 254);
         defaultColor = new Vec3d(254, 254, 254);
     }
 
@@ -74,6 +77,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
 
     static void getBlockID(String blockID) {
         blockIDString = blockID;
+        LOGGER.info(blockIDString);
         colorBlockID = getColorBlockID(blockIDString);
     }
 
@@ -86,6 +90,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
             JsonObject jsonObject = JsonParser.parseReader(new InputStreamReader(inputStream)).getAsJsonObject();
             JsonArray oresArray = jsonObject.getAsJsonArray("ores");
             JsonArray functionalArray = jsonObject.getAsJsonArray("functional");
+            JsonArray waterArray = jsonObject.getAsJsonArray("water");
 
             for (int i = 0; i < oresArray.size(); i++) {
                 ores.add(oresArray.get(i).getAsString());
@@ -94,6 +99,11 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
             for (int i = 0; i < functionalArray.size(); i++) {
                 functional.add(functionalArray.get(i).getAsString());
             }
+
+            for (int i = 0; i < waterArray.size(); i++) {
+                water.add(waterArray.get(i).getAsString());
+            }
+
         } catch (IOException e) {
             LOGGER.warn(String.valueOf(e));
         }
@@ -104,6 +114,8 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
             return oreColor;
         } else if (functional.contains(blockIDString)) {
             return functionalColor;
+        } else if (water.contains(blockIDString)) {
+            return waterColor;
         } else {
             return defaultColor;
         }
@@ -206,6 +218,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         } else {
             this.dead = true;
         }
+
         if (config.doubleSided) {
             //face the direction the player is in, so it works with transparent blocks
 

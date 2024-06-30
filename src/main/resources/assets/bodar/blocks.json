@@ -42,5 +42,8 @@
     "minecraft:smithing_table",
     "minecraft:barrel",
     "minecraft:composter"
+  ],
+  "water": [
+    "minecraft:water"
   ]
 }
