@@ -14,7 +14,6 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.RaycastContext;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import org.joml.Vector3fc;
 
 
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
@@ -23,6 +22,9 @@ import static net.bouncingelf10.bodar.WhiteDotParticle.Factory.setDirection;
 
 
 public class RayCast {
+
+    static HitResult hit;
+
     public static void rayCast(float xPixel, float yPixel) {
 
         MinecraftClient client = MinecraftClient.getInstance();
@@ -37,7 +39,7 @@ public class RayCast {
             Vec3d cameraPos = client.cameraEntity.getCameraPosVec(tickDelta);
             Vec3d screenVec = getWorldCoordsFromScreenCoords(client, xPixel, yPixel, cameraPos, maxReach, tickDelta);
 
-            HitResult hit = client.world.raycast(new RaycastContext(cameraPos, screenVec, RaycastContext.ShapeType.OUTLINE, includeFluids ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE, client.cameraEntity));
+            hit = client.world.raycast(new RaycastContext(cameraPos, screenVec, RaycastContext.ShapeType.OUTLINE, includeFluids ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE, client.cameraEntity));
 
             switch(hit.getType()) {
                 case MISS:
@@ -75,7 +77,7 @@ public class RayCast {
         verticalRotationAxis.cross(new Vector3f(0, 1, 0)); // POSITIVE_Y
         verticalRotationAxis.normalize();
 
-        Vector3f horizontalRotationAxis = new Vector3f((Vector3fc) cameraDirection);
+        Vector3f horizontalRotationAxis = new Vector3f(cameraDirection);
         horizontalRotationAxis.cross(verticalRotationAxis);
         horizontalRotationAxis.normalize();
 
@@ -88,7 +90,7 @@ public class RayCast {
 
         float horizontalRotation = (float) (x * fov / 1000); //30 -> 0.03
         float verticalRotation = (float) (y * fov / 1000); //120 -> 0.12
-        LOGGER.info("horizontalRotation: {}, verticalRotation: {}", horizontalRotation, verticalRotation);
+        //LOGGER.info("horizontalRotation: {}, verticalRotation: {}", horizontalRotation, verticalRotation);
         Vector3f temp = new Vector3f(center);
 
         Quaternionf horizontalRotationQuat = new Quaternionf().rotationAxis(horizontalRotation, horizontalRotationAxis);

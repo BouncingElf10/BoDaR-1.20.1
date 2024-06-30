@@ -1,10 +1,8 @@
-particles on a broking block should disappear
-
-parties should appear under tha water
+parties should appear under tha water  -- temp fix --> turn Graphics setting to "Fabulous"
 
 presets for performance (dense, medium, sparse)
 
-entities.
+entities. ;-;
 
 particles away from you should delete
 
