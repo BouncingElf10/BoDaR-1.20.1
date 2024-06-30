@@ -29,6 +29,9 @@ public class RayCast {
         double maxReach = config.reach; // The farthest target the cameraEntity can detect
         float tickDelta = 1.0F; // Used for tracking animation progress; no tracking is 1.0F
         boolean includeFluids = true; // Whether to detect fluids as blocks
+        if (client.player != null) { // if user is underwater to stop particles from collecting
+            includeFluids = !client.player.isSubmergedInWater();
+        }
 
         if (client.cameraEntity != null && client.world != null) {
             Vec3d cameraPos = client.cameraEntity.getCameraPosVec(tickDelta);
