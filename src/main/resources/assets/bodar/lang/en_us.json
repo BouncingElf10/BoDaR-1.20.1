@@ -19,6 +19,8 @@
   "text.autoconfig.bodar.option.doubleSided.@Tooltip": "If particles are double sided (may increase performance)",
   "text.autoconfig.bodar.option.maxAge": "Max Age",
   "text.autoconfig.bodar.option.maxAge.@Tooltip": "Maximum age of of the particles",
+  "text.autoconfig.bodar.option.fadeOutTime": "Fade out Time",
+  "text.autoconfig.bodar.option.fadeOutTime.@Tooltip": "Time it takes for particles to fade out after being broken",
   "text.autoconfig.bodar.option.particleSize": "Particle Size",
   "text.autoconfig.bodar.option.particleSize.@Tooltip": "How big the particles are",
   "text.autoconfig.bodar.option.oreColor": "Ore Colors",
