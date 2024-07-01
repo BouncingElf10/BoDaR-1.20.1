@@ -41,7 +41,8 @@
     "minecraft:loom",
     "minecraft:smithing_table",
     "minecraft:barrel",
-    "minecraft:composter"
+    "minecraft:composter",
+    "minecraft:ladder"
   ],
   "water": [
     "minecraft:water"
