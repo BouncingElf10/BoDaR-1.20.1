@@ -12,16 +12,11 @@ import net.minecraft.util.math.*;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import java.awt.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 import static net.bouncingelf10.bodar.RayCast.hit;
@@ -32,9 +27,6 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
     static Vec3d colorBlockID;
     static BoDaRConfig config = BoDaRConfig.get();
     MinecraftClient client = MinecraftClient.getInstance();
-    private static final Set<String> ores = new HashSet<>();
-    private static final Set<String> functional = new HashSet<>();
-    private static final Set<String> water = new HashSet<>();
 
     static Vec3d oreColor;
     static Vec3d functionalColor;
@@ -71,42 +63,25 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         return new Color(r, g, b);
     }
 
-    static {
-        loadBlockData();
-        resetColors();
-    }
-
     static void getBlockID(String blockID) {
         blockIDString = blockID;
         colorBlockID = getColorBlockID(blockIDString);
     }
 
-    static void loadBlockData() {
-        try (InputStream inputStream = WhiteDotParticle.class.getResourceAsStream("/assets/bodar/blocks.json")) {
-            if (inputStream == null) {
-                LOGGER.warn("Resource not found: /assets/bodar/blocks.json");
-                throw new IOException("Resource not found: /assets/bodar/blocks.json");
-            }
-            JsonObject jsonObject = JsonParser.parseReader(new InputStreamReader(inputStream)).getAsJsonObject();
-            JsonArray oresArray = jsonObject.getAsJsonArray("ores");
-            JsonArray functionalArray = jsonObject.getAsJsonArray("functional");
-            JsonArray waterArray = jsonObject.getAsJsonArray("water");
+    private static Set<String> ores = new HashSet<>();
+    private static Set<String> functional = new HashSet<>();
+    private static final Set<String> water = new HashSet<>();
 
-            for (int i = 0; i < oresArray.size(); i++) {
-                ores.add(oresArray.get(i).getAsString());
-            }
 
-            for (int i = 0; i < functionalArray.size(); i++) {
-                functional.add(functionalArray.get(i).getAsString());
-            }
+    static void loadBlocks() {
+        ores = Stream.of(config.ores).collect(Collectors.toSet());
+        functional = Stream.of(config.functionals).collect(Collectors.toSet());
+        water.add("minecraft:water");
+    }
 
-            for (int i = 0; i < waterArray.size(); i++) {
-                water.add(waterArray.get(i).getAsString());
-            }
-
-        } catch (IOException e) {
-            LOGGER.warn(String.valueOf(e));
-        }
+    static {
+        loadBlocks();
+        resetColors();
     }
 
     public static Vec3d getColorBlockID(String blockIDString) {
