@@ -22,7 +22,7 @@ public class BoDaRClient implements ClientModInitializer {
 
         BoDaRConfig config = BoDaRConfig.get();
             ClientTickEvents.END_CLIENT_TICK.register(client -> {
-                if (ModKeyBindings.RKeyBinding.wasPressed()) {
+                if (ModKeyBindings.RKeyBinding.isPressed()) {
                     if (config.isOn) {
                         LOGGER.info("R pressed");
                         loadBlocks();

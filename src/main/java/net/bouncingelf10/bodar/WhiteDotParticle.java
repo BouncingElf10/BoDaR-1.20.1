@@ -32,6 +32,8 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
     static Vec3d oreColor;
     static Vec3d functionalColor;
     static Vec3d waterColor;
+    static Vec3d lavaColor;
+    static Vec3d entityColor;
     static Vec3d defaultColor;
 
 
@@ -42,6 +44,8 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         oreColor = new Vec3d(oreColorHex.getRed(), oreColorHex.getGreen(), oreColorHex.getBlue());
         functionalColor = new Vec3d(functionalColorHex.getRed(), functionalColorHex.getGreen(), functionalColorHex.getBlue());
         waterColor = new Vec3d(0, 0, 254);
+        lavaColor = new Vec3d(254, 98, 0);
+        entityColor = new Vec3d(254, 0, 0);
         defaultColor = new Vec3d(254, 254, 254);
     }
 
@@ -72,12 +76,15 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
     private static Set<String> ores = new HashSet<>();
     private static Set<String> functional = new HashSet<>();
     private static final Set<String> water = new HashSet<>();
-
+    private static final Set<String> lava = new HashSet<>();
+    private static final Set<String> entity = new HashSet<>();
 
     static void loadBlocks() {
         ores = Stream.of(config.ores).collect(Collectors.toSet());
         functional = Stream.of(config.functionals).collect(Collectors.toSet());
         water.add("minecraft:water");
+        lava.add("minecraft:lava");
+        entity.add("minecraft:entity");
     }
 
     static {
@@ -92,6 +99,10 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
             return functionalColor;
         } else if (water.contains(blockIDString)) {
             return waterColor;
+        } else if (lava.contains(blockIDString)) {
+            return lavaColor;
+        } else if (entity.contains(blockIDString)) {
+            return entityColor;
         } else {
             return defaultColor;
         }
