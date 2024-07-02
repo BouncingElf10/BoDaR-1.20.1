@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static net.bouncingelf10.bodar.RayCast.rayCast;
-import static net.bouncingelf10.bodar.WhiteDotParticle.loadBlockData;
+import static net.bouncingelf10.bodar.WhiteDotParticle.loadBlocks;
 import static net.bouncingelf10.bodar.WhiteDotParticle.resetColors;
 
 public class BoDaRClient implements ClientModInitializer {
@@ -25,7 +25,7 @@ public class BoDaRClient implements ClientModInitializer {
                 if (ModKeyBindings.RKeyBinding.isPressed()) {
                     if (config.isOn) {
                         LOGGER.info("R pressed");
-                        loadBlockData();
+                        loadBlocks();
                         resetColors();
                         //LOGGER.info("Screen Resolution: {}, {}", window.getWidth(), window.getHeight());
                         var size = config.size;
