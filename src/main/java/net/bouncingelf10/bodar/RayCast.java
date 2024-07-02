@@ -3,6 +3,7 @@ package net.bouncingelf10.bodar;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.registry.Registries;
@@ -16,6 +17,8 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 
+import java.util.Optional;
+
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 import static net.bouncingelf10.bodar.WhiteDotParticle.*;
 import static net.bouncingelf10.bodar.WhiteDotParticle.Factory.setDirection;
@@ -26,12 +29,11 @@ public class RayCast {
     static HitResult hit;
 
     public static void rayCast(float xPixel, float yPixel) {
-
         MinecraftClient client = MinecraftClient.getInstance();
-        double maxReach = config.reach; // The farthest target the cameraEntity can detect
-        float tickDelta = 1.0F; // Used for tracking animation progress; no tracking is 1.0F
-        boolean includeFluids = true; // Whether to detect fluids as blocks
-        if (client.player != null) { // if user is underwater to stop particles from collecting
+        double maxReach = config.reach;
+        float tickDelta = 1.0F;
+        boolean includeFluids = true;
+        if (client.player != null) {
             includeFluids = !client.player.isSubmergedInWater();
         }
 
@@ -39,30 +41,113 @@ public class RayCast {
             Vec3d cameraPos = client.cameraEntity.getCameraPosVec(tickDelta);
             Vec3d screenVec = getWorldCoordsFromScreenCoords(client, xPixel, yPixel, cameraPos, maxReach, tickDelta);
 
-            hit = client.world.raycast(new RaycastContext(cameraPos, screenVec, RaycastContext.ShapeType.OUTLINE, includeFluids ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE, client.cameraEntity));
+            // Block raycast
+            HitResult blockHit = client.world.raycast(new RaycastContext(cameraPos, screenVec, RaycastContext.ShapeType.OUTLINE, includeFluids ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE, client.cameraEntity));
 
+            EntityHitInfo entityHitInfo = raycastEntities(client, cameraPos, screenVec, maxReach);
+
+            // Determine which hit is closer
+            if (entityHitInfo != null && (blockHit.getType() == HitResult.Type.MISS || entityHitInfo.hitPos.squaredDistanceTo(cameraPos) < blockHit.getPos().squaredDistanceTo(cameraPos))) {
+                hit = new EntityHitResult(entityHitInfo.entity, entityHitInfo.hitPos);
+            } else {
+                hit = blockHit;
+            }
+
+            LOGGER.info(String.valueOf(hit.getType()));
             switch(hit.getType()) {
                 case MISS:
-                    // nothing near enough
+                    LOGGER.info("Missed");
                     break;
                 case BLOCK:
-                    BlockHitResult blockHit = (BlockHitResult) hit;
-                    setDirection(blockHit.getSide());
+                    BlockHitResult blockHitResult = (BlockHitResult) hit;
+                    setDirection(blockHitResult.getSide());
 
-                    BlockState blockState = client.world.getBlockState(blockHit.getBlockPos());
+                    BlockState blockState = client.world.getBlockState(blockHitResult.getBlockPos());
                     Block block = blockState.getBlock();
                     Identifier blockId = Registries.BLOCK.getId(block);
 
                     getBlockID(String.valueOf(blockId));
 
-                    spawnParticle((float) blockHit.getPos().x, (float) blockHit.getPos().y, (float) blockHit.getPos().z, blockHit.getSide());
+                    spawnParticle((float) blockHitResult.getPos().x, (float) blockHitResult.getPos().y, (float) blockHitResult.getPos().z, blockHitResult.getSide());
                     break;
                 case ENTITY:
-                    EntityHitResult entityHit = (EntityHitResult) hit;
-                    LOGGER.info("Hit enitity: {}", entityHit.getEntity().getEntityName());
+                    EntityHitResult entityHitResult = (EntityHitResult) hit;
+                    LOGGER.info("Hit entity: {}, type: {}", entityHitResult.getEntity(), entityHitResult.getType());
+
+                    getBlockID("minecraft:entity");
+                    Vec3d hitPos = entityHitResult.getPos();
+                    Direction hitDirection = getEntityHitDirection(hitPos, entityHitResult.getEntity());
+                    setDirection(hitDirection);
+                    spawnParticle((float) hitPos.x, (float) hitPos.y, (float) hitPos.z, hitDirection);
                     break;
             }
         }
+    }
+
+    private static Direction getEntityHitDirection(Vec3d hitPos, Entity entity) {
+        Box boundingBox = entity.getBoundingBox();
+        Vec3d center = boundingBox.getCenter();
+
+        double dx = hitPos.x - center.x;
+        double dy = hitPos.y - center.y;
+        double dz = hitPos.z - center.z;
+
+        double absX = Math.abs(dx);
+        double absY = Math.abs(dy);
+        double absZ = Math.abs(dz);
+
+        double xExtent = (boundingBox.maxX - boundingBox.minX) / 2;
+        double yExtent = (boundingBox.maxY - boundingBox.minY) / 2;
+        double zExtent = (boundingBox.maxZ - boundingBox.minZ) / 2;
+
+        if (absX / xExtent > absY / yExtent && absX / xExtent > absZ / zExtent) {
+            return dx > 0 ? Direction.EAST : Direction.WEST;
+        } else if (absY / yExtent > absX / xExtent && absY / yExtent > absZ / zExtent) {
+            return dy > 0 ? Direction.UP : Direction.DOWN;
+        } else {
+            return dz > 0 ? Direction.SOUTH : Direction.NORTH;
+        }
+    }
+
+    private static class EntityHitInfo {
+        Entity entity;
+        Vec3d hitPos;
+
+        EntityHitInfo(Entity entity, Vec3d hitPos) {
+            this.entity = entity;
+            this.hitPos = hitPos;
+        }
+    }
+
+    private static EntityHitInfo raycastEntities(MinecraftClient client, Vec3d start, Vec3d end, double maxDistance) {
+        Vec3d vec3d = end.subtract(start);
+        if (vec3d.lengthSquared() > maxDistance * maxDistance) {
+            vec3d = vec3d.normalize().multiply(maxDistance);
+        }
+        Vec3d endVec = start.add(vec3d);
+
+        assert client.world != null;
+        Iterable<Entity> entities = client.world.getEntities();
+        Entity closestHitEntity = null;
+        Vec3d closestHitPos = null;
+        double closestHitDistance = maxDistance;
+
+        for (Entity entity : entities) {
+            Box entityBox = entity.getBoundingBox().expand(entity.getTargetingMargin());
+            Optional<Vec3d> optionalHit = entityBox.raycast(start, endVec);
+
+            if (optionalHit.isPresent()) {
+                Vec3d hitPos = optionalHit.get();
+                double hitDistance = start.distanceTo(hitPos);
+                if (hitDistance < closestHitDistance) {
+                    closestHitEntity = entity;
+                    closestHitPos = hitPos;
+                    closestHitDistance = hitDistance;
+                }
+            }
+        }
+
+        return closestHitEntity != null ? new EntityHitInfo(closestHitEntity, closestHitPos) : null;
     }
 
     private static Vec3d getWorldCoordsFromScreenCoords(MinecraftClient client, float xPixel, float yPixel, Vec3d cameraPos, double maxReach, float tickDelta) {
@@ -103,6 +188,8 @@ public class RayCast {
 
         return new Vec3d(temp.x, temp.y, temp.z);
     }
+
+
 
 
     static ClientWorld world = MinecraftClient.getInstance().world;
