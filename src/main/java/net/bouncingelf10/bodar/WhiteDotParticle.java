@@ -8,6 +8,7 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.*;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -105,7 +106,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         this.setVelocity(velocityX, velocityY, velocityZ);
         this.rotation = getRotationQuaternion(direction);
         this.setColor((float) ((float) 255 - colorBlockID.x), (float) ((float) 255 - colorBlockID.y), (float) ((float) 255 - colorBlockID.z));
-        this.initialBlockPos = blockPos;
+        this.initialBlockPos = blockPos != null ? blockPos : new BlockPos((int)x, (int)y, (int)z);
     }
 
     private float getScale() {
@@ -287,12 +288,14 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         }
 
         // Check the block state of the initial block position
-        BlockState blockState = this.world.getBlockState(this.initialBlockPos);
-        // Check if the block is air (indicating it has been broken)
-        if (blockState.isAir() && !isFading) {
-            isFading = true;
-            fadeOutStart = age; // Store the age when fading starts
-            fadeOutDuration = config.fadeOutTime; // Duration over which the particle will fade out (20 ticks)
+        if (initialBlockPos != null) {
+            BlockState blockState = this.world.getBlockState(this.initialBlockPos);
+            // Check if the block is air (indicating it has been broken)
+            if (blockState.isAir() && !isFading) {
+                isFading = true;
+                fadeOutStart = age; // Store the age when fading starts
+                fadeOutDuration = config.fadeOutTime; // Duration over which the particle will fade out (20 ticks)
+            }
         }
 
         // Handle fading out
@@ -322,18 +325,24 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         @Override
         public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
             Direction direction = side; // Use the stored direction
-            ///////////////////////////////////
             BlockPos particlePos = null;
-            switch (hit.getType()) {
-                case MISS, ENTITY: break;
-                case BLOCK: {
-                    BlockHitResult blockHit = (BlockHitResult) hit;
-                    particlePos = blockHit.getBlockPos();
+            if (hit != null) {
+                switch (hit.getType()) {
+                    case BLOCK: {
+                        BlockHitResult blockHit = (BlockHitResult) hit;
+                        particlePos = blockHit.getBlockPos();
+                        break;
+                    }
+                    case ENTITY: {
+                        EntityHitResult entityHit = (EntityHitResult) hit;
+                        Vec3d hitPos = entityHit.getPos();
+                        particlePos = new BlockPos((int)hitPos.x, (int)hitPos.y, (int)hitPos.z);
+                        break;
+                    }
+                    default: break;
                 }
             }
-            ///////////////////////////////////
-            BlockPos blockPos = particlePos; // Capture the block position
-            WhiteDotParticle particle = new WhiteDotParticle(world, x, y, z, velocityX, velocityY, velocityZ, direction, blockPos);
+            WhiteDotParticle particle = new WhiteDotParticle(world, x, y, z, velocityX, velocityY, velocityZ, direction, particlePos);
             particle.setSprite(this.spriteProvider);
             return particle;
         }
