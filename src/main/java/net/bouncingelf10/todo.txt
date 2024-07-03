@@ -2,12 +2,15 @@ parties should appear under tha water  -- temp fix --> turn Graphics setting to 
 
 presets for performance (dense, medium, sparse)  -- not possible with cloth config
 
-entities. ;-;
+custom particles for passive, hostile and misc entieis
 
 particles away from you should delete
 
 toggleable black / invis textures for blocks
 
+increase particle count
+
+PERFORMANCE IMPROVEMENTS
 
 ------------------------- bugs ------------------------------------
 
@@ -16,3 +19,9 @@ fading particles makes the particles behind it inviable
 if your in a water block, but just outside actually being submerged it makes a wierd particle
 
 semi transparent particles clipping with each-other combine, creating a brighter segment
+
+remove assertions in code
+
+remove / alter redundant comments
+
+3rd person broken
