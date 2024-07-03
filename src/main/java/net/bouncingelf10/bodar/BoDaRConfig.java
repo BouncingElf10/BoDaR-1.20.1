@@ -33,6 +33,7 @@ public class BoDaRConfig implements ConfigData {
     @ConfigEntry.Gui.Tooltip
     public int maxAge = 400;
 
+    @ConfigEntry.Gui.RequiresRestart
     @ConfigEntry.Gui.Tooltip
     public int fadeOutTime = 20;
 
