@@ -202,7 +202,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
 
     private final int randomRotation = random.nextInt(360);
 
-    private static final int ENTITY_FADE_DURATION = config.fadeOutTime * 3; // 3 seconds at 20 TPS
+    private static final int ENTITY_FADE_DURATION = config.fadeOutTime * 6; // 3 seconds at 20 TPS
     private static final int BLOCK_FADE_DURATION = config.fadeOutTime; // 1 second at 20 TPS
     private int fadeDuration;
     private int fadeStartAge;
