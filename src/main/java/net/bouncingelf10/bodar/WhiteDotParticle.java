@@ -6,9 +6,11 @@ import net.minecraft.client.particle.*;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.*;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -20,7 +22,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
-import static net.bouncingelf10.bodar.RayCast.hit;
 
 public class WhiteDotParticle extends SpriteBillboardParticle {
 
@@ -107,10 +108,12 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
             return defaultColor;
         }
     }
-
+    private final Vec3d initialBlockHitPos;
+    private final Vec3d initialHitPos;
+    private Vec3d initialEntityPos = null;
     private final BlockPos initialBlockPos;
     private Quaternionf rotation;
-    protected WhiteDotParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Direction direction, BlockPos blockPos) {
+    protected WhiteDotParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Direction direction, BlockPos blockPos, Entity hitEntity, Vec3d hitPos) {
         super(world, x, y, z, velocityX, velocityY, velocityZ);
         this.scale = config.particleSize;
         this.maxAge = config.maxAge;
@@ -118,6 +121,11 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         this.rotation = getRotationQuaternion(direction);
         this.setColor((float) ((float) 255 - colorBlockID.x), (float) ((float) 255 - colorBlockID.y), (float) ((float) 255 - colorBlockID.z));
         this.initialBlockPos = blockPos != null ? blockPos : new BlockPos((int)x, (int)y, (int)z);
+        this.initialHitPos = hitPos;
+        this.initialEntityPos = hitEntity != null ? hitEntity.getPos() : null;
+        this.initialBlockHitPos = blockPos != null ? new Vec3d(blockPos.getX(), blockPos.getY(), blockPos.getZ()) : null;
+        this.isFading = false;
+        this.fadeStartAge = 0;
     }
 
     private float getScale() {
@@ -194,15 +202,17 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
 
     private final int randomRotation = random.nextInt(360);
 
+    private static final int ENTITY_FADE_DURATION = 60; // 3 seconds at 20 TPS
+    private static final int BLOCK_FADE_DURATION = 20; // 1 second at 20 TPS
+    private int fadeDuration;
+    private int fadeStartAge;
     private boolean isFading;
-    private int fadeOutStart;
-    private int fadeOutDuration;
 
     @Override
     public void tick() {
         super.tick();
 
-        float lifespan = (float) (maxAge * 0.95 - (Math.random() / 10));  // Calculate 95% of the maxAge
+        float lifespan = (float) (maxAge * 0.95 - (Math.random() / 10));
         if (config.isOn) {
             if (age >= lifespan && !isFading) {
                 this.alpha = 1 - ((age - lifespan) / (maxAge - lifespan));
@@ -298,62 +308,120 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
             }
         }
 
-        // Check the block state of the initial block position
-        if (initialBlockPos != null) {
+        boolean shouldFade = false;
+        boolean isEntityParticle = initialEntityPos != null && initialHitPos != null;
+
+        if (isEntityParticle) {
+            Entity entity = null;
+            for (Entity e : world.getEntities()) {
+                if (e.getPos().squaredDistanceTo(initialEntityPos) < 0.01) {
+                    entity = e;
+                    break;
+                }
+            }
+
+            if (entity != null) {
+                Vec3d currentEntityPos = entity.getPos();
+                Vec3d entityMovement = currentEntityPos.subtract(initialEntityPos);
+                Vec3d newParticlePos = initialHitPos.add(entityMovement);
+
+                double distanceMoved = initialEntityPos.distanceTo(currentEntityPos);
+                if (distanceMoved > 0.1) { // Entity has moved significantly
+                    shouldFade = true;
+                } else {
+                    // Update particle position relative to entity movement
+                    this.setPos(newParticlePos.x, newParticlePos.y, newParticlePos.z);
+                }
+            } else {
+                // Entity not found, possibly despawned
+                shouldFade = true;
+            }
+        } else if (initialBlockPos != null && initialBlockHitPos != null) {
             BlockState blockState = this.world.getBlockState(this.initialBlockPos);
-            // Check if the block is air (indicating it has been broken)
-            if (blockState.isAir() && !isFading) {
-                isFading = true;
-                fadeOutStart = age; // Store the age when fading starts
-                fadeOutDuration = config.fadeOutTime; // Duration over which the particle will fade out (20 ticks)
+            if (blockState.isAir()) {
+                shouldFade = true;
+            } else {
+                // Maintain the initial displacement from the block
+                Vec3d displacement = new Vec3d(this.x, this.y, this.z).subtract(initialBlockHitPos);
+                this.setPos(initialBlockHitPos.x + displacement.x,
+                        initialBlockHitPos.y + displacement.y,
+                        initialBlockHitPos.z + displacement.z);
             }
         }
 
-        // Handle fading out
+        // Start fading if necessary
+        if (shouldFade && !isFading) {
+            isFading = true;
+            fadeStartAge = age;
+            fadeDuration = isEntityParticle ? ENTITY_FADE_DURATION : BLOCK_FADE_DURATION;
+        }
+
+        // Handle fading
         if (isFading) {
-            int fadeOutProgress = age - fadeOutStart;
-            if (fadeOutProgress < fadeOutDuration) {
-                this.alpha = 1 - (float) fadeOutProgress / fadeOutDuration;
-            } else {
+            int fadeAge = age - fadeStartAge;
+            if (fadeAge >= fadeDuration) {
                 this.markDead();
+            } else {
+                this.alpha = 1.0f - (float)fadeAge / fadeDuration;
             }
+        }
+
+        // Handle normal particle aging
+        if (this.age++ >= this.maxAge) {
+            this.markDead();
         }
     }
 
     public static class Factory implements ParticleFactory<DefaultParticleType> {
         private final SpriteProvider spriteProvider;
+        private static Direction side;
+        private static HitResult lastHit;
 
         public Factory(SpriteProvider spriteProvider) {
             this.spriteProvider = spriteProvider;
             LOGGER.info("WhiteDotParticle Factory initialized with spriteProvider");
         }
 
-        static Direction side;
         public static void setDirection(Direction sideGot) {
             side = sideGot;
         }
 
+        public static void setLastHit(HitResult hitResult) {
+            lastHit = hitResult;
+        }
+
         @Override
         public Particle createParticle(DefaultParticleType type, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
-            Direction direction = side; // Use the stored direction
+            Direction direction = side;
             BlockPos particlePos = null;
-            if (hit != null) {
-                switch (hit.getType()) {
-                    case BLOCK: {
-                        BlockHitResult blockHit = (BlockHitResult) hit;
+            Entity hitEntity = null;
+            Vec3d hitPos = new Vec3d(x, y, z);
+
+            if (lastHit != null) {
+                switch (lastHit.getType()) {
+                    case BLOCK:
+                        BlockHitResult blockHit = (BlockHitResult) lastHit;
                         particlePos = blockHit.getBlockPos();
+                        hitPos = blockHit.getPos();
+                        // Add displacement here as well
+                        double displacement = 0.005 + Math.random() * 0.005;
+                        hitPos = hitPos.add(
+                                direction.getOffsetX() * displacement,
+                                direction.getOffsetY() * displacement,
+                                direction.getOffsetZ() * displacement
+                        );
                         break;
-                    }
-                    case ENTITY: {
-                        EntityHitResult entityHit = (EntityHitResult) hit;
-                        Vec3d hitPos = entityHit.getPos();
-                        particlePos = new BlockPos((int)hitPos.x, (int)hitPos.y, (int)hitPos.z);
+                    case ENTITY:
+                        EntityHitResult entityHit = (EntityHitResult) lastHit;
+                        hitEntity = entityHit.getEntity();
+                        hitPos = entityHit.getPos();
                         break;
-                    }
-                    default: break;
+                    default:
+                        break;
                 }
             }
-            WhiteDotParticle particle = new WhiteDotParticle(world, x, y, z, velocityX, velocityY, velocityZ, direction, particlePos);
+
+            WhiteDotParticle particle = new WhiteDotParticle(world, hitPos.x, hitPos.y, hitPos.z, velocityX, velocityY, velocityZ, direction, particlePos, hitEntity, hitPos);
             particle.setSprite(this.spriteProvider);
             return particle;
         }
