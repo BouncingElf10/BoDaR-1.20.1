@@ -53,6 +53,8 @@ public class RayCast {
                 hit = blockHit;
             }
 
+            Factory.setLastHit(hit);
+
             LOGGER.info(String.valueOf(hit.getType()));
             switch(hit.getType()) {
                 case MISS:
@@ -68,7 +70,7 @@ public class RayCast {
 
                     getBlockID(String.valueOf(blockId));
 
-                    spawnParticle((float) blockHitResult.getPos().x, (float) blockHitResult.getPos().y, (float) blockHitResult.getPos().z, blockHitResult.getSide());
+                    spawnParticle(new Vec3d((float) blockHitResult.getPos().x, (float) blockHitResult.getPos().y, (float) blockHitResult.getPos().z), blockHitResult.getSide());
                     break;
                 case ENTITY:
                     EntityHitResult entityHitResult = (EntityHitResult) hit;
@@ -78,7 +80,7 @@ public class RayCast {
                     Vec3d hitPos = entityHitResult.getPos();
                     Direction hitDirection = getEntityHitDirection(hitPos, entityHitResult.getEntity());
                     setDirection(hitDirection);
-                    spawnParticle((float) hitPos.x, (float) hitPos.y, (float) hitPos.z, hitDirection);
+                    spawnParticle(new Vec3d((float) hitPos.x, (float) hitPos.y, (float) hitPos.z), hitDirection);
                     break;
             }
         }
@@ -194,18 +196,16 @@ public class RayCast {
 
     static ClientWorld world = MinecraftClient.getInstance().world;
 
-    public static void spawnParticle(float hitX, float hitY, float hitZ, Direction direction) {
+    public static void spawnParticle(Vec3d hitPos, Direction direction) {
         if (world != null) {
-            // LOGGER.info("Spawning Particle at: {}, {}, {}", hitX, hitY, hitZ);
-
-            switch (direction) {
-                case UP -> world.addParticle(BoDaR.WhiteDotParticle, hitX, hitY + Math.random() / 1000, hitZ, 0, 0, 0);
-                case DOWN -> world.addParticle(BoDaR.WhiteDotParticle, hitX, hitY - Math.random() / 1000, hitZ, 0, 0, 0);
-                case NORTH -> world.addParticle(BoDaR.WhiteDotParticle, hitX, hitY, hitZ - Math.random() / 1000, 0, 0, 0);
-                case EAST -> world.addParticle(BoDaR.WhiteDotParticle, hitX + Math.random() / 1000, hitY, hitZ, 0, 0, 0);
-                case SOUTH -> world.addParticle(BoDaR.WhiteDotParticle, hitX, hitY, hitZ + Math.random() / 1000, 0, 0, 0);
-                case WEST -> world.addParticle(BoDaR.WhiteDotParticle, hitX - Math.random() / 1000, hitY, hitZ, 0, 0, 0);
-            }
+            // Add a small displacement in the direction of the hit face
+            double displacement = 0.005 + Math.random() * 0.005; // Random value between 0.005 and 0.01
+            Vec3d displacedPos = hitPos.add(
+                    direction.getOffsetX() * displacement,
+                    direction.getOffsetY() * displacement,
+                    direction.getOffsetZ() * displacement
+            );
+            world.addParticle(BoDaR.WhiteDotParticle, displacedPos.x, displacedPos.y, displacedPos.z, 0, 0, 0);
         }
     }
 }
