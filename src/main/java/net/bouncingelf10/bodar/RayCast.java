@@ -4,6 +4,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.mob.Monster;
+import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.registry.Registries;
@@ -74,9 +76,20 @@ public class RayCast {
                     break;
                 case ENTITY:
                     EntityHitResult entityHitResult = (EntityHitResult) hit;
-                    LOGGER.info("Hit entity: {}, type: {}", entityHitResult.getEntity(), entityHitResult.getType());
+                    Entity entity = entityHitResult.getEntity();
+                    LOGGER.info("Hit entity: {}, type: {}", entity, entityHitResult.getType());
 
-                    getBlockID("minecraft:entity");
+                    if (entity instanceof Monster) {
+                        LOGGER.info("The entity is hostile.");
+                        getBlockID("minecraft:entityhostile");
+                    } else if (entity instanceof PassiveEntity) {
+                        LOGGER.info("The entity is passive.");
+                        getBlockID("minecraft:entitypassive");
+                    } else {
+                        LOGGER.info("The entity is of another type.");
+                        getBlockID("minecraft:entitymisc");
+                    }
+
                     Vec3d hitPos = entityHitResult.getPos();
                     Direction hitDirection = getEntityHitDirection(hitPos, entityHitResult.getEntity());
                     setDirection(hitDirection);
