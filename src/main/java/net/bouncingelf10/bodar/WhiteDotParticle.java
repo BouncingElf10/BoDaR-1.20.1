@@ -34,8 +34,10 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
     static Vec3d functionalColor;
     static Vec3d waterColor;
     static Vec3d lavaColor;
-    static Vec3d entityColor;
     static Vec3d defaultColor;
+    static Vec3d entityhostileColor;
+    static Vec3d entitypassiveColor;
+    static Vec3d entitymiscColor;
 
 
     static void resetColors() {
@@ -46,8 +48,10 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         functionalColor = new Vec3d(functionalColorHex.getRed(), functionalColorHex.getGreen(), functionalColorHex.getBlue());
         waterColor = new Vec3d(0, 0, 254);
         lavaColor = new Vec3d(254, 98, 0);
-        entityColor = new Vec3d(254, 0, 0);
         defaultColor = new Vec3d(254, 254, 254);
+        entityhostileColor = new Vec3d(254, 0, 0);
+        entitypassiveColor = new Vec3d(0, 254, 0);
+        entitymiscColor = new Vec3d(0, 0, 254);
     }
 
     static Color parseColor(String colorString) {
@@ -78,14 +82,18 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
     private static Set<String> functional = new HashSet<>();
     private static final Set<String> water = new HashSet<>();
     private static final Set<String> lava = new HashSet<>();
-    private static final Set<String> entity = new HashSet<>();
+    private static final Set<String> entityhostile = new HashSet<>();
+    private static final Set<String> entitypassive = new HashSet<>();
+    private static final Set<String> entitymisc = new HashSet<>();
 
     static void loadBlocks() {
         ores = Stream.of(config.ores).collect(Collectors.toSet());
         functional = Stream.of(config.functionals).collect(Collectors.toSet());
         water.add("minecraft:water");
         lava.add("minecraft:lava");
-        entity.add("minecraft:entity");
+        entityhostile.add("minecraft:entityhostile");
+        entitypassive.add("minecraft:entitypassive");
+        entitymisc.add("minecraft:entitymisc");
     }
 
     static {
@@ -102,8 +110,12 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
             return waterColor;
         } else if (lava.contains(blockIDString)) {
             return lavaColor;
-        } else if (entity.contains(blockIDString)) {
-            return entityColor;
+        } else if (entityhostile.contains(blockIDString)) {
+            return entityhostileColor;
+        } else if (entitypassive.contains(blockIDString)) {
+            return entitypassiveColor;
+        } else if (entitymisc.contains(blockIDString)) {
+            return entitymiscColor;
         } else {
             return defaultColor;
         }
