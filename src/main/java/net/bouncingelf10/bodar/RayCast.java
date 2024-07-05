@@ -21,7 +21,6 @@ import org.joml.Vector3f;
 
 import java.util.Optional;
 
-import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 import static net.bouncingelf10.bodar.WhiteDotParticle.*;
 import static net.bouncingelf10.bodar.WhiteDotParticle.Factory.setDirection;
 
@@ -57,10 +56,10 @@ public class RayCast {
 
             Factory.setLastHit(hit);
 
-            LOGGER.info(String.valueOf(hit.getType()));
+            //LOGGER.info(String.valueOf(hit.getType()));
             switch(hit.getType()) {
                 case MISS:
-                    LOGGER.info("Missed");
+                    //LOGGER.info("Missed");
                     break;
                 case BLOCK:
                     BlockHitResult blockHitResult = (BlockHitResult) hit;
@@ -77,16 +76,16 @@ public class RayCast {
                 case ENTITY:
                     EntityHitResult entityHitResult = (EntityHitResult) hit;
                     Entity entity = entityHitResult.getEntity();
-                    LOGGER.info("Hit entity: {}, type: {}", entity, entityHitResult.getType());
+                    //LOGGER.info("Hit entity: {}, type: {}", entity, entityHitResult.getType());
 
                     if (entity instanceof Monster) {
-                        LOGGER.info("The entity is hostile.");
+                        //LOGGER.info("The entity is hostile.");
                         getBlockID("minecraft:entityhostile");
                     } else if (entity instanceof PassiveEntity) {
-                        LOGGER.info("The entity is passive.");
+                        //LOGGER.info("The entity is passive.");
                         getBlockID("minecraft:entitypassive");
                     } else {
-                        LOGGER.info("The entity is of another type.");
+                        //LOGGER.info("The entity is of another type.");
                         getBlockID("minecraft:entitymisc");
                     }
 

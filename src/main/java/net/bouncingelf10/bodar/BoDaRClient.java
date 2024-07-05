@@ -16,6 +16,7 @@ public class BoDaRClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+
         LOGGER.info("Initializing client");
         ModKeyBindings.registerKeyBindings();
         LOGGER.info("Keybind(s) Initialised");
