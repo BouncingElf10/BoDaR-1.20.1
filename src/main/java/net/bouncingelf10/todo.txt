@@ -2,13 +2,11 @@ parties should appear under tha water  -- temp fix --> turn Graphics setting to 
 
 presets for performance (dense, medium, sparse)  -- not possible with cloth config
 
-custom particles for passive, hostile and misc enteritis
-
-toggleable black / invis textures for blocks
-
-increase particle count
+increase particle count  --not possible
 
 PERFORMANCE IMPROVEMENTS
+
+toggleable black / invis textures for blocks
 
 ------------------------- bugs ------------------------------------
 
