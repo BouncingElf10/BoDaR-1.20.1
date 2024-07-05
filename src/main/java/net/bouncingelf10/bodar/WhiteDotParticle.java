@@ -1,5 +1,6 @@
 package net.bouncingelf10.bodar;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.*;
@@ -120,18 +121,34 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
             return defaultColor;
         }
     }
+
+    private static int getBlockColor(ClientWorld world, BlockPos pos) {
+        BlockState state = world.getBlockState(pos);
+        Block block = state.getBlock();
+        return block.getDefaultMapColor().color;
+    }
+
     private final Vec3d initialBlockHitPos;
     private final Vec3d initialHitPos;
     private Vec3d initialEntityPos = null;
     private final BlockPos initialBlockPos;
     private Quaternionf rotation;
-    protected WhiteDotParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Direction direction, BlockPos blockPos, Entity hitEntity, Vec3d hitPos) {
+    protected WhiteDotParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Direction direction, BlockPos blockPos, Entity hitEntity, Vec3d hitPos, int blockColor) {
         super(world, x, y, z, velocityX, velocityY, velocityZ);
         this.scale = config.particleSize;
         this.maxAge = config.maxAge;
         this.setVelocity(velocityX, velocityY, velocityZ);
         this.rotation = getRotationQuaternion(direction);
-        this.setColor((float) ((float) 255 - colorBlockID.x), (float) ((float) 255 - colorBlockID.y), (float) ((float) 255 - colorBlockID.z));
+
+        if (config.useBlockColors && blockColor != -1) {
+            float r = ((blockColor >> 16) & 0xFF) / 255f;
+            float g = ((blockColor >> 8) & 0xFF) / 255f;
+            float b = (blockColor & 0xFF) / 255f;
+            this.setColor(r, g, b);
+        } else {
+            this.setColor((float) ((float) 255 - colorBlockID.x), (float) ((float) 255 - colorBlockID.y), (float) ((float) 255 - colorBlockID.z));
+        }
+
         this.initialBlockPos = blockPos != null ? blockPos : new BlockPos((int)x, (int)y, (int)z);
         this.initialHitPos = hitPos;
         this.initialEntityPos = hitEntity != null ? hitEntity.getPos() : null;
@@ -408,6 +425,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
             BlockPos particlePos = null;
             Entity hitEntity = null;
             Vec3d hitPos = new Vec3d(x, y, z);
+            int blockColor = -1;
 
             if (lastHit != null) {
                 switch (lastHit.getType()) {
@@ -422,6 +440,9 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
                                 direction.getOffsetY() * displacement,
                                 direction.getOffsetZ() * displacement
                         );
+                        if (config.useBlockColors) {
+                            blockColor = getBlockColor(world, particlePos);
+                        }
                         break;
                     case ENTITY:
                         EntityHitResult entityHit = (EntityHitResult) lastHit;
@@ -433,7 +454,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
                 }
             }
 
-            WhiteDotParticle particle = new WhiteDotParticle(world, hitPos.x, hitPos.y, hitPos.z, velocityX, velocityY, velocityZ, direction, particlePos, hitEntity, hitPos);
+            WhiteDotParticle particle = new WhiteDotParticle(world, hitPos.x, hitPos.y, hitPos.z, velocityX, velocityY, velocityZ, direction, particlePos, hitEntity, hitPos, blockColor);
             particle.setSprite(this.spriteProvider);
             return particle;
         }

@@ -41,6 +41,9 @@ public class BoDaRConfig implements ConfigData {
     public float particleSize = 0.02f;
 
     @ConfigEntry.Gui.Tooltip
+    public boolean useBlockColors = false;
+
+    @ConfigEntry.Gui.Tooltip
     @ConfigEntry.ColorPicker
     public int oreColor = 119935;
 
