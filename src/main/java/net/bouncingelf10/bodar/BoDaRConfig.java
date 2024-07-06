@@ -40,8 +40,15 @@ public class BoDaRConfig implements ConfigData {
     @ConfigEntry.Gui.Tooltip
     public float particleSize = 0.02f;
 
-    @ConfigEntry.Gui.Tooltip
-    public boolean useBlockColors = false;
+    public enum ColorMode {
+        DEFAULT,
+        MIXED,
+        WORLD
+    }
+
+    @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+    @ConfigEntry.Gui.Tooltip(count = 4)
+    public ColorMode particleColorMode = ColorMode.DEFAULT;
 
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.ColorPicker
