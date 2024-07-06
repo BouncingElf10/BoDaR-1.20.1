@@ -2,29 +2,48 @@
   "key.bodar.example": "Use BoDaR",
   "key.bodar.open_config": "Open BoDaR Config Menu",
   "category.bodar.main": "BoDaR",
+
   "text.autoconfig.bodar.title": "BoDaR Config Menu",
+
   "text.autoconfig.bodar.option.isOn": "Active",
   "text.autoconfig.bodar.option.isOn.@Tooltip": "If the mod is active or not",
+
   "text.autoconfig.bodar.option.size": "Size",
   "text.autoconfig.bodar.option.size.@Tooltip": "How big the area is of the BoDaR beam",
+
   "text.autoconfig.bodar.option.density": "Density",
   "text.autoconfig.bodar.option.density.@Tooltip": "How dense the beams are (more dense = more particles = less performance",
+
   "text.autoconfig.bodar.option.randomness": "Randomness",
   "text.autoconfig.bodar.option.randomness.@Tooltip": "How spread out the dots are",
+
   "text.autoconfig.bodar.option.reach": "Reach",
   "text.autoconfig.bodar.option.reach.@Tooltip": "How far the dot will reach (higher = less performance)",
+
   "text.autoconfig.bodar.option.randomRotation": "Random Rotation",
   "text.autoconfig.bodar.option.randomRotation.@Tooltip": "If the dot are randomly rotated or not",
+
   "text.autoconfig.bodar.option.doubleSided": "Double sided",
   "text.autoconfig.bodar.option.doubleSided.@Tooltip": "If particles are double sided (may increase performance)",
+
   "text.autoconfig.bodar.option.maxAge": "Max Age",
   "text.autoconfig.bodar.option.maxAge.@Tooltip": "Maximum age of of the particles",
+
   "text.autoconfig.bodar.option.fadeOutTime": "Fade out Time",
   "text.autoconfig.bodar.option.fadeOutTime.@Tooltip": "Time it takes for particles to fade out after being broken",
+
   "text.autoconfig.bodar.option.particleSize": "Particle Size",
   "text.autoconfig.bodar.option.particleSize.@Tooltip": "How big the particles are",
+
+  "text.autoconfig.bodar.option.particleColorMode": "Particle Color Mode",
+  "text.autoconfig.bodar.option.particleColorMode.@Tooltip[0]": "Choose how particle colors are determined",
+  "text.autoconfig.bodar.option.particleColorMode.@Tooltip[1]": "Default: Uses predefined colors",
+  "text.autoconfig.bodar.option.particleColorMode.@Tooltip[2]": "Mixed: Uses predefined colors when available, otherwise uses world colors",
+  "text.autoconfig.bodar.option.particleColorMode.@Tooltip[3]": "World: Always uses colors based on the block's map color",
+
   "text.autoconfig.bodar.option.oreColor": "Ore Colors",
   "text.autoconfig.bodar.option.oreColor.@Tooltip": "Color of particles when the hit a ore",
+
   "text.autoconfig.bodar.option.functionalColor": "Functional Blocks Color",
   "text.autoconfig.bodar.option.functionalColor.@Tooltip": "Color of particles when they hit a functional blocks (eg. furnace)"
 }

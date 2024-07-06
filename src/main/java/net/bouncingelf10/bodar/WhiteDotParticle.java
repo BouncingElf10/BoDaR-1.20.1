@@ -102,6 +102,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         resetColors();
     }
 
+    static boolean isDefaultColor = false;
     public static Vec3d getColorBlockID(String blockIDString) {
         if (ores.contains(blockIDString)) {
             return oreColor;
@@ -118,15 +119,35 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         } else if (entitymisc.contains(blockIDString)) {
             return entitymiscColor;
         } else {
+            isDefaultColor = true;
             return defaultColor;
         }
     }
 
     private static int getBlockColor(ClientWorld world, BlockPos pos) {
-        BlockState state = world.getBlockState(pos);
-        Block block = state.getBlock();
-        return block.getDefaultMapColor().color;
+        if (config.particleColorMode == BoDaRConfig.ColorMode.WORLD) {
+            BlockState state = world.getBlockState(pos);
+            Block block = state.getBlock();
+            isDefaultColor = false;
+            return block.getDefaultMapColor().color;
+        } else {
+            BlockState state = world.getBlockState(pos);
+            Block block = state.getBlock();
+            if (isDefaultColor) {
+                isDefaultColor = false;
+                return block.getDefaultMapColor().color;
+            }
+            return vec3dToInt(getColorBlockID(blockIDString));
+        }
     }
+
+    private static int vec3dToInt(Vec3d vec) {
+        int r = (int) vec.getX() & 0xFF;
+        int g = (int) vec.getY() & 0xFF;
+        int b = (int) vec.getZ() & 0xFF;
+        return (r << 16) | (g << 8) | b;
+    }
+
 
     private final Vec3d initialBlockHitPos;
     private final Vec3d initialHitPos;
@@ -140,7 +161,12 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
         this.setVelocity(velocityX, velocityY, velocityZ);
         this.rotation = getRotationQuaternion(direction);
 
-        if (config.useBlockColors && blockColor != -1) {
+        if (config.particleColorMode == BoDaRConfig.ColorMode.WORLD && blockColor != -1) {
+            float r = ((blockColor >> 16) & 0xFF) / 255f;
+            float g = ((blockColor >> 8) & 0xFF) / 255f;
+            float b = (blockColor & 0xFF) / 255f;
+            this.setColor(r, g, b);
+        } else if (config.particleColorMode == BoDaRConfig.ColorMode.MIXED && blockColor != -1) {
             float r = ((blockColor >> 16) & 0xFF) / 255f;
             float g = ((blockColor >> 8) & 0xFF) / 255f;
             float b = (blockColor & 0xFF) / 255f;
@@ -440,9 +466,13 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
                                 direction.getOffsetY() * displacement,
                                 direction.getOffsetZ() * displacement
                         );
-                        if (config.useBlockColors) {
+
+                        if (config.particleColorMode == BoDaRConfig.ColorMode.DEFAULT) {
+                            break;
+                        } else {
                             blockColor = getBlockColor(world, particlePos);
                         }
+
                         break;
                     case ENTITY:
                         EntityHitResult entityHit = (EntityHitResult) lastHit;
