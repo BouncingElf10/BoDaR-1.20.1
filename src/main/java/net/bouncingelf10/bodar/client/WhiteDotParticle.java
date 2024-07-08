@@ -1,5 +1,6 @@
-package net.bouncingelf10.bodar;
+package net.bouncingelf10.bodar.client;
 
+import net.bouncingelf10.bodar.config.BoDaRConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;

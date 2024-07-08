@@ -1,5 +1,6 @@
 package net.bouncingelf10.bodar;
 
+import net.bouncingelf10.bodar.config.BoDaRConfig;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.particle.DefaultParticleType;
