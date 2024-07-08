@@ -19,13 +19,13 @@
 			"net.bouncingelf10.bodar.BoDaR"
 		],
 		"client": [
-			"net.bouncingelf10.bodar.BoDaRClient"
+			"net.bouncingelf10.bodar.client.BoDaRClient"
 		],
 		"fabric-datagen": [
-			"net.bouncingelf10.bodar.BoDaRDataGenerator"
+			"net.bouncingelf10.bodar.init.BoDaRDataGenerator"
 		],
 		"modmenu": [
-			"net.bouncingelf10.bodar.ModMenuIntegration"
+			"net.bouncingelf10.bodar.init.ModMenuIntegration"
 		]
 	},
 	"mixins": [

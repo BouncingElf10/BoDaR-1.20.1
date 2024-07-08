@@ -1,4 +1,4 @@
-package net.bouncingelf10.bodar;
+package net.bouncingelf10.bodar.config;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;

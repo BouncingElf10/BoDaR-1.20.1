@@ -1,6 +1,7 @@
-package net.bouncingelf10.bodar;
+package net.bouncingelf10.bodar.init;
 
 import me.shedaniel.autoconfig.AutoConfig;
+import net.bouncingelf10.bodar.config.BoDaRConfig;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;

@@ -1,8 +1,9 @@
-package net.bouncingelf10.bodar;
+package net.bouncingelf10.bodar.init;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import me.shedaniel.autoconfig.AutoConfig;
+import net.bouncingelf10.bodar.config.BoDaRConfig;
 
 public class ModMenuIntegration implements ModMenuApi {
     @Override

@@ -1,5 +1,6 @@
-package net.bouncingelf10.bodar;
+package net.bouncingelf10.bodar.client;
 
+import net.bouncingelf10.bodar.BoDaR;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -21,8 +22,8 @@ import org.joml.Vector3f;
 
 import java.util.Optional;
 
-import static net.bouncingelf10.bodar.WhiteDotParticle.*;
-import static net.bouncingelf10.bodar.WhiteDotParticle.Factory.setDirection;
+import static net.bouncingelf10.bodar.client.WhiteDotParticle.*;
+import static net.bouncingelf10.bodar.client.WhiteDotParticle.Factory.setDirection;
 
 
 public class RayCast {

@@ -1,5 +1,8 @@
-package net.bouncingelf10.bodar;
+package net.bouncingelf10.bodar.client;
 
+import net.bouncingelf10.bodar.BoDaR;
+import net.bouncingelf10.bodar.config.BoDaRConfig;
+import net.bouncingelf10.bodar.init.ModKeyBindings;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
@@ -7,9 +10,9 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static net.bouncingelf10.bodar.RayCast.rayCast;
-import static net.bouncingelf10.bodar.WhiteDotParticle.loadBlocks;
-import static net.bouncingelf10.bodar.WhiteDotParticle.resetColors;
+import static net.bouncingelf10.bodar.client.RayCast.rayCast;
+import static net.bouncingelf10.bodar.client.WhiteDotParticle.loadBlocks;
+import static net.bouncingelf10.bodar.client.WhiteDotParticle.resetColors;
 
 public class BoDaRClient implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(BoDaRClient.class);
