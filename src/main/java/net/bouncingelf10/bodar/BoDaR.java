@@ -1,6 +1,7 @@
 package net.bouncingelf10.bodar;
 
 import net.bouncingelf10.bodar.config.BoDaRConfig;
+import net.bouncingelf10.bodar.networking.BoDaRPackets;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.particle.DefaultParticleType;
@@ -26,5 +27,8 @@ public class BoDaR implements ModInitializer {
 
 		LOGGER.info("Registering AutoConfig");
 		AutoConfig.register(BoDaRConfig.class, GsonConfigSerializer::new);
+
+		LOGGER.info("Registering C2S Packets");
+		BoDaRPackets.registerC2SPackets();
 	}
 }
