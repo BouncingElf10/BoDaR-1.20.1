@@ -1,12 +1,16 @@
 package net.bouncingelf10.bodar.client;
 
 import net.bouncingelf10.bodar.BoDaR;
+import net.bouncingelf10.bodar.networking.BoDaRPackets;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.registry.Registries;
@@ -64,36 +68,34 @@ public class RayCast {
                     break;
                 case BLOCK:
                     BlockHitResult blockHitResult = (BlockHitResult) hit;
-                    setDirection(blockHitResult.getSide());
 
                     BlockState blockState = client.world.getBlockState(blockHitResult.getBlockPos());
                     Block block = blockState.getBlock();
                     Identifier blockId = Registries.BLOCK.getId(block);
 
-                    getBlockID(String.valueOf(blockId));
-
-                    spawnParticle(new Vec3d((float) blockHitResult.getPos().x, (float) blockHitResult.getPos().y, (float) blockHitResult.getPos().z), blockHitResult.getSide());
+                    spawnParticle(new Vec3d((float) blockHitResult.getPos().x, (float) blockHitResult.getPos().y, (float) blockHitResult.getPos().z), blockHitResult.getSide(), String.valueOf(blockId));
                     break;
                 case ENTITY:
                     EntityHitResult entityHitResult = (EntityHitResult) hit;
                     Entity entity = entityHitResult.getEntity();
                     //LOGGER.info("Hit entity: {}, type: {}", entity, entityHitResult.getType());
 
+                    String entityID;
                     if (entity instanceof Monster) {
                         //LOGGER.info("The entity is hostile.");
-                        getBlockID("minecraft:entityhostile");
+                        entityID = "minecraft:entityhostile";
                     } else if (entity instanceof PassiveEntity) {
                         //LOGGER.info("The entity is passive.");
-                        getBlockID("minecraft:entitypassive");
+                        entityID = "minecraft:entitypassive";
                     } else {
                         //LOGGER.info("The entity is of another type.");
-                        getBlockID("minecraft:entitymisc");
+                        entityID = "minecraft:entitymisc";
                     }
 
                     Vec3d hitPos = entityHitResult.getPos();
                     Direction hitDirection = getEntityHitDirection(hitPos, entityHitResult.getEntity());
-                    setDirection(hitDirection);
-                    spawnParticle(new Vec3d((float) hitPos.x, (float) hitPos.y, (float) hitPos.z), hitDirection);
+
+                    spawnParticle(new Vec3d((float) hitPos.x, (float) hitPos.y, (float) hitPos.z), hitDirection, entityID);
                     break;
             }
         }
@@ -209,7 +211,7 @@ public class RayCast {
 
     static ClientWorld world = MinecraftClient.getInstance().world;
 
-    public static void spawnParticle(Vec3d hitPos, Direction direction) {
+    public static void spawnParticle(Vec3d hitPos, Direction direction, String colorID) {
         if (world != null) {
             // Add a small displacement in the direction of the hit face
             double displacement = 0.005 + Math.random() * 0.005; // Random value between 0.005 and 0.01
@@ -218,7 +220,29 @@ public class RayCast {
                     direction.getOffsetY() * displacement,
                     direction.getOffsetZ() * displacement
             );
-            world.addParticle(BoDaR.WhiteDotParticle, displacedPos.x, displacedPos.y, displacedPos.z, 0, 0, 0);
+            //world.addParticle(BoDaR.WhiteDotParticle, displacedPos.x, displacedPos.y, displacedPos.z, 0, 0, 0);
+
+            PacketByteBuf buf = PacketByteBufs.create();
+
+            buf.writeDouble(displacedPos.x);
+            buf.writeDouble(displacedPos.y);
+            buf.writeDouble(displacedPos.z);
+            buf.writeInt(direction.getId());
+            buf.writeString(colorID);
+
+            ClientPlayNetworking.send(BoDaRPackets.BODAR_PACKET_ID, buf);
         }
+    }
+
+    public static void spawnParticleServer(Vec3d hitPos, Direction direction, String colorID) {
+        ClientWorld world = MinecraftClient.getInstance().world;
+        double x = hitPos.x;
+        double y = hitPos.y;
+        double z = hitPos.z;
+
+        getBlockID(colorID);
+        setDirection(direction);
+        assert world != null;
+        world.addParticle(BoDaR.WhiteDotParticle, x, y, z, 0, 0, 0);
     }
 }
