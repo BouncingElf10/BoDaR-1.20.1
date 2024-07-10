@@ -20,8 +20,10 @@ public class BoDaRC2SPacket {
 
         //LOGGER.info("Received particle (C2S) POS at: {}, {}, {}", x, y, z);
 
-        server.getPlayerManager().getPlayerList().forEach(serverPlayer ->
-                BoDaRS2CPacket.send(serverPlayer, x, y, z, direction, colorID)
-        );
+        server.getPlayerManager().getPlayerList().stream()
+                .filter(serverPlayer -> serverPlayer != player)
+                .forEach(serverPlayer ->
+                        BoDaRS2CPacket.send(serverPlayer, x, y, z, direction, colorID)
+                );
     }
 }
