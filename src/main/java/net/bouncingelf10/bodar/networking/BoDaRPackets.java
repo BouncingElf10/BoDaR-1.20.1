@@ -28,7 +28,7 @@ public class BoDaRPackets {
             double z = buf.readDouble();
             Direction direction = Direction.byId(buf.readInt());
             String colorID = buf.readString();
-            LOGGER.info("Client received particle POS at: {}, {}, {}", x, y, z);
+            //LOGGER.info("Client received particle POS at: {}, {}, {}", x, y, z);
             client.execute(() -> {
                 // Force spawn particle on main thread
                 MinecraftClient.getInstance().execute(() -> {

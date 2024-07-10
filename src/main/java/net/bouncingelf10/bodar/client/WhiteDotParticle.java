@@ -225,8 +225,6 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
     @Override
     public void buildGeometry(VertexConsumer vertexConsumer, Camera camera, float tickDelta) {
 
-        LOGGER.info("Rendering particle at: {}, {}, {}", this.x, this.y, this.z);
-
         Vec3d cameraPos = camera.getPos();
         float x = (float) (MathHelper.lerp(tickDelta, this.prevPosX, this.x) - cameraPos.getX());
         float y = (float) (MathHelper.lerp(tickDelta, this.prevPosY, this.y) - cameraPos.getY());

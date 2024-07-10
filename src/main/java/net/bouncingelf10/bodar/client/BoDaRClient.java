@@ -25,7 +25,7 @@ public class BoDaRClient implements ClientModInitializer {
         ModKeyBindings.registerKeyBindings();
 
         BoDaRPackets.registerS2CPackets();
-        LOGGER.info("Main loop starting");
+
         BoDaRConfig config = BoDaRConfig.get();
             ClientTickEvents.END_CLIENT_TICK.register(client -> {
                 if (ModKeyBindings.RKeyBinding.isPressed()) {
@@ -41,7 +41,7 @@ public class BoDaRClient implements ClientModInitializer {
                             for (double j = size * -1; j <= size; j = j + density) {
                                 float xOffset = (float) (j + Math.random() / randomness);
                                 float yOffset = (float) (i + Math.random() / randomness);
-                                LOGGER.info("New Offset: {}, {}", xOffset, yOffset);
+                                //LOGGER.info("New Offset: {}, {}", xOffset, yOffset);
                                 rayCast(xOffset, yOffset);
                             }
                         }
