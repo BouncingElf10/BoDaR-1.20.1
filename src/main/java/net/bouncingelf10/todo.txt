@@ -8,6 +8,15 @@ PERFORMANCE IMPROVEMENTS
 
 toggleable black / invis textures for blocks
 
+
+================ Multiplayer
+
+Player hits shouldn't spawn a particle
+
+fix colors
+
+================
+
 ------------------------- bugs ------------------------------------
 
 fading particles makes the particles behind it inviable
