@@ -11,11 +11,15 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 
 public class BoDaRPackets {
     public static final Identifier BODAR_PACKET_ID =  new Identifier(BoDaR.MOD_ID, "particle");
-
+    static Set<Vec3d> recentlySpawnedParticles = new HashSet<>();
 
     public static void registerC2SPackets() {
         ServerPlayNetworking.registerGlobalReceiver(BODAR_PACKET_ID, BoDaRC2SPacket::receive);
@@ -29,12 +33,21 @@ public class BoDaRPackets {
             Direction direction = Direction.byId(buf.readInt());
             String colorID = buf.readString();
             //LOGGER.info("Client received particle POS at: {}, {}, {}", x, y, z);
+
             client.execute(() -> {
                 // Force spawn particle on main thread
-                MinecraftClient.getInstance().execute(() -> {
-                    RayCast.spawnParticleServer(new Vec3d(x, y, z), direction, colorID);
-                });
+                if (!recentlySpawnedParticles.contains(new Vec3d(x, y, z))) {
+                    MinecraftClient.getInstance().execute(() -> {
+                        RayCast.spawnParticleServer(new Vec3d(x, y, z), direction, colorID);
+                    });
+                }
             });
+
+            recentlySpawnedParticles.add(new Vec3d(x, y, z));
+
+            if (recentlySpawnedParticles.size() >= 5) {
+                recentlySpawnedParticles.clear();
+            }
         });
     }
 
