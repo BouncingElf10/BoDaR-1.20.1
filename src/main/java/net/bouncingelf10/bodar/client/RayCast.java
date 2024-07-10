@@ -26,6 +26,7 @@ import org.joml.Vector3f;
 
 import java.util.Optional;
 
+import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 import static net.bouncingelf10.bodar.client.WhiteDotParticle.*;
 import static net.bouncingelf10.bodar.client.WhiteDotParticle.Factory.setDirection;
 
@@ -213,14 +214,17 @@ public class RayCast {
 
     public static void spawnParticle(Vec3d hitPos, Direction direction, String colorID) {
         if (world != null) {
-            // Add a small displacement in the direction of the hit face
-            double displacement = 0.005 + Math.random() * 0.005; // Random value between 0.005 and 0.01
+            LOGGER.info("Starting particle POS at: {}, {}, {}", hitPos.x, hitPos.y, hitPos.z);
+            double displacement = 0.005 + Math.random() * 0.005;
             Vec3d displacedPos = hitPos.add(
                     direction.getOffsetX() * displacement,
                     direction.getOffsetY() * displacement,
                     direction.getOffsetZ() * displacement
             );
-            //world.addParticle(BoDaR.WhiteDotParticle, displacedPos.x, displacedPos.y, displacedPos.z, 0, 0, 0);
+            LOGGER.info("Spawning particle at: {}, {}, {}", displacedPos.x, displacedPos.y, displacedPos.z);
+            getBlockID(colorID);
+            setDirection(direction);
+            world.addParticle(BoDaR.WhiteDotParticle, displacedPos.x, displacedPos.y, displacedPos.z, 0, 0, 0);
 
             PacketByteBuf buf = PacketByteBufs.create();
 
@@ -231,6 +235,8 @@ public class RayCast {
             buf.writeString(colorID);
 
             ClientPlayNetworking.send(BoDaRPackets.BODAR_PACKET_ID, buf);
+        } else {
+            LOGGER.warn("Cannot spawn particle: world is null");
         }
     }
 
@@ -240,9 +246,11 @@ public class RayCast {
         double y = hitPos.y;
         double z = hitPos.z;
 
+        LOGGER.info("Attempting to spawn particle at: {}, {}, {}", x, y, z);
         getBlockID(colorID);
         setDirection(direction);
         assert world != null;
         world.addParticle(BoDaR.WhiteDotParticle, x, y, z, 0, 0, 0);
+        LOGGER.info("Particle spawned at: {}, {}, {}", x, y, z);
     }
 }

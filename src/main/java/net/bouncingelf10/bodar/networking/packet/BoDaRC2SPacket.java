@@ -18,7 +18,7 @@ public class BoDaRC2SPacket {
         Direction direction = Direction.byId(buf.readInt());
         String colorID = buf.readString();
 
-        //LOGGER.info("Hit at: {}, {}, {}, Direction {}", x, y, z, direction);
+        LOGGER.info("Received particle (C2S) POS at: {}, {}, {}", x, y, z);
 
         server.getPlayerManager().getPlayerList().forEach(serverPlayer ->
                 BoDaRS2CPacket.send(serverPlayer, x, y, z, direction, colorID)
