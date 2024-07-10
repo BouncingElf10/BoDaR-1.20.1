@@ -10,6 +10,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.client.world.ClientWorld;
@@ -88,6 +89,9 @@ public class RayCast {
                     } else if (entity instanceof PassiveEntity) {
                         //LOGGER.info("The entity is passive.");
                         entityID = "minecraft:entitypassive";
+                    } else if (entity instanceof PlayerEntity) {
+                        //LOGGER.info("The entity is passive.");
+                        entityID = "minecraft:entityplayer";
                     } else {
                         //LOGGER.info("The entity is of another type.");
                         entityID = "minecraft:entitymisc";
@@ -95,8 +99,9 @@ public class RayCast {
 
                     Vec3d hitPos = entityHitResult.getPos();
                     Direction hitDirection = getEntityHitDirection(hitPos, entityHitResult.getEntity());
-
-                    spawnParticle(new Vec3d((float) hitPos.x, (float) hitPos.y, (float) hitPos.z), hitDirection, entityID);
+                    if (!entityID.equals("minecraft:entityplayer")) {
+                        spawnParticle(new Vec3d((float) hitPos.x, (float) hitPos.y, (float) hitPos.z), hitDirection, entityID);
+                    }
                     break;
             }
         }
