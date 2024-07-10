@@ -214,14 +214,14 @@ public class RayCast {
 
     public static void spawnParticle(Vec3d hitPos, Direction direction, String colorID) {
         if (world != null) {
-            LOGGER.info("Starting particle POS at: {}, {}, {}", hitPos.x, hitPos.y, hitPos.z);
+            //LOGGER.info("Starting particle POS at: {}, {}, {}", hitPos.x, hitPos.y, hitPos.z);
             double displacement = 0.005 + Math.random() * 0.005;
             Vec3d displacedPos = hitPos.add(
                     direction.getOffsetX() * displacement,
                     direction.getOffsetY() * displacement,
                     direction.getOffsetZ() * displacement
             );
-            LOGGER.info("Spawning particle at: {}, {}, {}", displacedPos.x, displacedPos.y, displacedPos.z);
+            //LOGGER.info("Spawning particle at: {}, {}, {}", displacedPos.x, displacedPos.y, displacedPos.z);
             getBlockID(colorID);
             setDirection(direction);
             world.addParticle(BoDaR.WhiteDotParticle, displacedPos.x, displacedPos.y, displacedPos.z, 0, 0, 0);
@@ -236,7 +236,7 @@ public class RayCast {
 
             ClientPlayNetworking.send(BoDaRPackets.BODAR_PACKET_ID, buf);
         } else {
-            LOGGER.warn("Cannot spawn particle: world is null");
+            //LOGGER.warn("Cannot spawn particle: world is null");
         }
     }
 
@@ -246,11 +246,11 @@ public class RayCast {
         double y = hitPos.y;
         double z = hitPos.z;
 
-        LOGGER.info("Attempting to spawn particle at: {}, {}, {}", x, y, z);
+        //LOGGER.info("Attempting to spawn particle at: {}, {}, {}", x, y, z);
         getBlockID(colorID);
         setDirection(direction);
         assert world != null;
         world.addParticle(BoDaR.WhiteDotParticle, x, y, z, 0, 0, 0);
-        LOGGER.info("Particle spawned at: {}, {}, {}", x, y, z);
+        //LOGGER.info("Particle spawned at: {}, {}, {}", x, y, z);
     }
 }

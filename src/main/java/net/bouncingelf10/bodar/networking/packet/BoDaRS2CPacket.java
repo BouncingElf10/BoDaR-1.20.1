@@ -21,6 +21,6 @@ public class BoDaRS2CPacket {
         buf.writeInt(direction.getId());
         buf.writeString(colorID);
         ServerPlayNetworking.send(player, ID, buf);
-        LOGGER.info("Sending particle (S2C) POS at: {}, {}, {}", x, y, z);
+        //LOGGER.info("Sending particle (S2C) POS at: {}, {}, {}", x, y, z);
     }
 }
