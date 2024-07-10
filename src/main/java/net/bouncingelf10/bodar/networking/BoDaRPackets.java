@@ -6,9 +6,12 @@ import net.bouncingelf10.bodar.networking.packet.BoDaRC2SPacket;
 import net.bouncingelf10.bodar.networking.packet.BoDaRS2CPacket;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+
+import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 
 public class BoDaRPackets {
     public static final Identifier BODAR_PACKET_ID =  new Identifier(BoDaR.MOD_ID, "particle");
@@ -25,11 +28,12 @@ public class BoDaRPackets {
             double z = buf.readDouble();
             Direction direction = Direction.byId(buf.readInt());
             String colorID = buf.readString();
-
+            LOGGER.info("Client received particle POS at: {}, {}, {}", x, y, z);
             client.execute(() -> {
-                // Handle the received data on the client side
-                // For example, spawn particles or update UI
-                RayCast.spawnParticleServer(new Vec3d(x, y, z), direction, colorID);
+                // Force spawn particle on main thread
+                MinecraftClient.getInstance().execute(() -> {
+                    RayCast.spawnParticleServer(new Vec3d(x, y, z), direction, colorID);
+                });
             });
         });
     }

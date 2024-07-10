@@ -8,6 +8,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.Identifier;
 
+import static net.bouncingelf10.bodar.BoDaR.LOGGER;
+
 public class BoDaRS2CPacket {
     public static final Identifier ID = new Identifier(BoDaR.MOD_ID, "s2c_packet");
 
@@ -19,5 +21,6 @@ public class BoDaRS2CPacket {
         buf.writeInt(direction.getId());
         buf.writeString(colorID);
         ServerPlayNetworking.send(player, ID, buf);
+        LOGGER.info("Sending particle (S2C) POS at: {}, {}, {}", x, y, z);
     }
 }
