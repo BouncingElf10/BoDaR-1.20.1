@@ -13,13 +13,27 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 
 public class BoDaRPackets {
     public static final Identifier BODAR_PACKET_ID =  new Identifier(BoDaR.MOD_ID, "particle");
-    static Set<Vec3d> recentlySpawnedParticles = new HashSet<>();
+
+    private static final Map<Vec3d, Long> recentlySpawnedParticles = new ConcurrentHashMap<>();
+    private static final long PARTICLE_EXPIRATION_TIME = 1000; // milliseconds
+
+    public static void addRecentParticle(Vec3d position) {
+        recentlySpawnedParticles.put(position, System.currentTimeMillis());
+    }
+
+    public static boolean canSpawnParticle(Vec3d position) {
+        long currentTime = System.currentTimeMillis();
+        recentlySpawnedParticles.entrySet().removeIf(entry -> currentTime - entry.getValue() > PARTICLE_EXPIRATION_TIME);
+        return !recentlySpawnedParticles.containsKey(position);
+    }
 
     public static void registerC2SPackets() {
         ServerPlayNetworking.registerGlobalReceiver(BODAR_PACKET_ID, BoDaRC2SPacket::receive);
@@ -36,19 +50,21 @@ public class BoDaRPackets {
 
             client.execute(() -> {
                 // Force spawn particle on main thread
-                if (!recentlySpawnedParticles.contains(new Vec3d(x, y, z))) {
+                if (canSpawnParticle(new Vec3d(x, y, z))) {
                     MinecraftClient.getInstance().execute(() -> {
                         RayCast.spawnParticleServer(new Vec3d(x, y, z), direction, colorID);
                     });
                 }
             });
 
-            recentlySpawnedParticles.add(new Vec3d(x, y, z));
+            addRecentParticle(new Vec3d(x, y, z));
 
             if (recentlySpawnedParticles.size() >= 5) {
                 recentlySpawnedParticles.clear();
             }
         });
     }
+
+
 
 }
