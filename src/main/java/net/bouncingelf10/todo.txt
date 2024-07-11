@@ -11,7 +11,7 @@ toggleable black / invis textures for blocks
 
 ================ Multiplayer
 
-Player hits shouldn't spawn a particle
+client 1 cant see client 2 particles
 
 fix colors
 
