@@ -8,6 +8,15 @@ PERFORMANCE IMPROVEMENTS
 
 toggleable black / invis textures for blocks
 
+
+================ Multiplayer
+
+client 1 cant see client 2 particles
+
+fix colors
+
+================
+
 ------------------------- bugs ------------------------------------
 
 fading particles makes the particles behind it inviable
