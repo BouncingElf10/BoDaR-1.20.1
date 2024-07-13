@@ -39,7 +39,7 @@ public class BoDaRClient implements ClientModInitializer {
                             for (double j = size * -1; j <= size; j = j + density) {
                                 float xOffset = (float) (j + Math.random() / randomness);
                                 float yOffset = (float) (i + Math.random() / randomness);
-                                LOGGER.info("New Offset: {}, {}", xOffset, yOffset);
+                                //LOGGER.info("New Offset: {}, {}", xOffset, yOffset);
                                 rayCast(xOffset, yOffset);
                             }
                         }

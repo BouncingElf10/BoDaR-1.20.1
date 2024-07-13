@@ -4,6 +4,7 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.AutoConfig;
+import net.minecraft.client.MinecraftClient;
 
 
 @Config(name = "bodar")
@@ -11,6 +12,9 @@ public class BoDaRConfig implements ConfigData {
 
     @ConfigEntry.Gui.Tooltip
     public boolean isOn = true;
+
+    @ConfigEntry.Gui.Tooltip
+    public boolean invisibleWorldMode = false;
 
     @ConfigEntry.Gui.Tooltip
     public double size = 5.0;
