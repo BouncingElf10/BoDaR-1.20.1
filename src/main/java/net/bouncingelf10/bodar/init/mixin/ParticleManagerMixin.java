@@ -1,8 +1,10 @@
 package net.bouncingelf10.bodar.init.mixin;
 
+import net.bouncingelf10.bodar.BoDaR;
 import net.bouncingelf10.bodar.config.BoDaRConfig;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleType;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,13 +25,12 @@ public class ParticleManagerMixin {
             cancellable = true
     )
     private void onAddParticle(ParticleEffect parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ, CallbackInfoReturnable ci) {
-        //LOGGER.info(parameters.toString());
-        if (BoDaRConfig.get().invisibleWorldMode) {
-            if (parameters.getType().toString().contains("net.fabricmc.fabric.api.particle.v1.FabricParticleTypes")) {
-                return;
-            }
-            ci.setReturnValue(null);
-        }
+        if (BoDaRConfig.get().invisibleWorldMode){
+            ParticleType<?> particleType = parameters.getType();
 
+            if (particleType != BoDaR.WhiteDotParticle) {
+                ci.setReturnValue(null);
+            }
+        }
     }
 }
