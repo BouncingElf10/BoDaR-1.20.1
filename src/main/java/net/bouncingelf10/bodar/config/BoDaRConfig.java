@@ -14,7 +14,7 @@ public class BoDaRConfig implements ConfigData {
     public boolean isOn = true;
 
     @ConfigEntry.Gui.Tooltip
-    public boolean invisibleWorldMode = false;
+    public boolean invisibleWorldMode = true;
 
     @ConfigEntry.Gui.Tooltip
     public double size = 5.0;
@@ -43,6 +43,10 @@ public class BoDaRConfig implements ConfigData {
 
     @ConfigEntry.Gui.Tooltip
     public float particleSize = 0.02f;
+
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.ColorPicker
+    public int skyboxColor = 0x000000; // Default to black
 
     public enum ColorMode {
         DEFAULT,
