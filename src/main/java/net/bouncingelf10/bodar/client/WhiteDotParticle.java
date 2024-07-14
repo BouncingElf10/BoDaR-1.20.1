@@ -126,14 +126,12 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
     }
 
     private static int getBlockColor(ClientWorld world, BlockPos pos) {
+        BlockState state = world.getBlockState(pos);
+        Block block = state.getBlock();
         if (config.particleColorMode == BoDaRConfig.ColorMode.WORLD) {
-            BlockState state = world.getBlockState(pos);
-            Block block = state.getBlock();
             isDefaultColor = false;
             return block.getDefaultMapColor().color;
         } else {
-            BlockState state = world.getBlockState(pos);
-            Block block = state.getBlock();
             if (isDefaultColor) {
                 isDefaultColor = false;
                 return block.getDefaultMapColor().color;
