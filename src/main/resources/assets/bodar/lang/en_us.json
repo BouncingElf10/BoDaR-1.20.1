@@ -48,5 +48,11 @@
   "text.autoconfig.bodar.option.oreColor.@Tooltip": "Color of particles when the hit a ore",
 
   "text.autoconfig.bodar.option.functionalColor": "Functional Blocks Color",
-  "text.autoconfig.bodar.option.functionalColor.@Tooltip": "Color of particles when they hit a functional blocks (eg. furnace)"
+  "text.autoconfig.bodar.option.functionalColor.@Tooltip": "Color of particles when they hit a functional blocks (eg. furnace)",
+
+  "text.autoconfig.bodar.option.ores": "Ores",
+  "text.autoconfig.bodar.option.ores.@Tooltip": "What block is considered a \"Ore\"",
+
+  "text.autoconfig.bodar.option.functionals": "Functional Blocks",
+  "text.autoconfig.bodar.option.functionals.@Tooltip": "What block is considered a \"Functional Block\""
 }
