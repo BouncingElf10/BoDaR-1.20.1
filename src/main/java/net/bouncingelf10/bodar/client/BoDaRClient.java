@@ -2,7 +2,7 @@ package net.bouncingelf10.bodar.client;
 
 import net.bouncingelf10.bodar.BoDaR;
 import net.bouncingelf10.bodar.config.BoDaRConfig;
-import net.bouncingelf10.bodar.init.ModKeyBindings;
+import net.bouncingelf10.bodar.init.BoDaRKeyBindings;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
@@ -21,12 +21,12 @@ public class BoDaRClient implements ClientModInitializer {
     public void onInitializeClient() {
 
         LOGGER.info("Initializing client");
-        ModKeyBindings.registerKeyBindings();
+        BoDaRKeyBindings.registerKeyBindings();
         LOGGER.info("Keybind(s) Initialised");
 
         BoDaRConfig config = BoDaRConfig.get();
             ClientTickEvents.END_CLIENT_TICK.register(client -> {
-                if (ModKeyBindings.RKeyBinding.isPressed()) {
+                if (BoDaRKeyBindings.RKeyBinding.isPressed()) {
                     if (config.isOn) {
                         LOGGER.info("R pressed");
                         loadBlocks();
