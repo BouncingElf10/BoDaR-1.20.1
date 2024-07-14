@@ -21,9 +21,6 @@ public class BoDaRConfig implements ConfigData {
     public double density = 2.0;
 
     @ConfigEntry.Gui.Tooltip
-    public double randomness = 0.5;
-
-    @ConfigEntry.Gui.Tooltip
     public int reach = 24;
 
     @ConfigEntry.Gui.Tooltip

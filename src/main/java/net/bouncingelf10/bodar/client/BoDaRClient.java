@@ -34,11 +34,11 @@ public class BoDaRClient implements ClientModInitializer {
                         //LOGGER.info("Screen Resolution: {}, {}", window.getWidth(), window.getHeight());
                         var size = config.size;
                         var density = config.density;
-                        var randomness = config.randomness;
+                        var randomness = config.density / 2;
                         for (double i = size * -1; i <= size; i = i + density) {
                             for (double j = size * -1; j <= size; j = j + density) {
-                                float xOffset = (float) (j + Math.random() / randomness);
-                                float yOffset = (float) (i + Math.random() / randomness);
+                                float xOffset = (float) (j + (Math.random() * 2 - 1) * randomness);
+                                float yOffset = (float) (i + (Math.random() * 2 - 1) * randomness);
                                 //LOGGER.info("New Offset: {}, {}", xOffset, yOffset);
                                 rayCast(xOffset, yOffset);
                             }
