@@ -1,11 +1,13 @@
 package net.bouncingelf10.bodar.init.mixin;
 
 import net.bouncingelf10.bodar.config.BoDaRConfig;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.BlockPos;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,6 +41,12 @@ public class RenderManagerMixin {
     }
     @Inject(method = "renderWeather", at = @At("HEAD"), cancellable = true)
     private void onRenderWeather(LightmapTextureManager manager, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo ci) {
+        if (BoDaRConfig.get().invisibleWorldMode && BoDaRConfig.get().isOn) {
+            ci.cancel();
+        }
+    }
+    @Inject(method = "drawBlockOutline", at = @At("HEAD"), cancellable = true)
+    private void onRenderBlockOutline(MatrixStack matrices, VertexConsumer vertexConsumer, Entity entity, double cameraX, double cameraY, double cameraZ, BlockPos pos, BlockState state, CallbackInfo ci) {
         if (BoDaRConfig.get().invisibleWorldMode && BoDaRConfig.get().isOn) {
             ci.cancel();
         }
