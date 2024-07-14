@@ -6,8 +6,6 @@ increase particle count  --not possible
 
 PERFORMANCE IMPROVEMENTS
 
-off center
-
 F3 keybinding to clear all particles
 
 All 3 dimension testing
