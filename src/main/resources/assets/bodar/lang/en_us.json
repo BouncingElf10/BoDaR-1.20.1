@@ -17,9 +17,6 @@
   "text.autoconfig.bodar.option.density": "Density",
   "text.autoconfig.bodar.option.density.@Tooltip": "How dense the beams are (more dense = more particles = less performance",
 
-  "text.autoconfig.bodar.option.randomness": "Randomness",
-  "text.autoconfig.bodar.option.randomness.@Tooltip": "How spread out the dots are",
-
   "text.autoconfig.bodar.option.reach": "Reach",
   "text.autoconfig.bodar.option.reach.@Tooltip": "How far the dot will reach (higher = less performance)",
 
