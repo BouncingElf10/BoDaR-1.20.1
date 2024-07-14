@@ -10,6 +10,8 @@ off center
 
 F3 keybinding to clear all particles
 
+All 3 dimension testing
+
 
 ================ Multiplayer
 
