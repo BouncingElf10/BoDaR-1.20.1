@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class BlockEntityRenderMixin {
     @Inject(method = "render(Lnet/minecraft/block/entity/BlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;)V", at = @At("HEAD"), cancellable = true)
     private void onRender(BlockEntity blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, CallbackInfo ci) {
-        if (BoDaRConfig.get().invisibleWorldMode) {
+        if (BoDaRConfig.get().invisibleWorldMode && BoDaRConfig.get().isOn) {
             ci.cancel();
         }
     }
