@@ -6,7 +6,9 @@ increase particle count  --not possible
 
 PERFORMANCE IMPROVEMENTS
 
-toggleable black / invis textures for blocks
+off center
+
+F3 keybinding to clear all particles
 
 
 ================ Multiplayer
