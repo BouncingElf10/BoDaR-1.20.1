@@ -13,7 +13,7 @@ public class SkyboxMixin {
     @Inject(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At("HEAD"), cancellable = true)
     private void onRenderSky(CallbackInfo ci) {
         BoDaRConfig config = BoDaRConfig.get();
-        if (config.invisibleWorldMode && config.isOn) {
+        if (!config.invisibleWorldMode && config.isOn) {
             RenderSystem.clearColor(
                     ((config.skyboxColor >> 16) & 0xFF) / 255f,
                     ((config.skyboxColor >> 8) & 0xFF) / 255f,

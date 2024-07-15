@@ -43,6 +43,9 @@ public class BoDaRConfig implements ConfigData {
     @ConfigEntry.ColorPicker
     public int skyboxColor = 0x000000; // Default to black
 
+    @ConfigEntry.Gui.Tooltip
+    public boolean renderEntitiesWithColor = true; // Default to black
+
     public enum ColorMode {
         DEFAULT,
         MIXED,

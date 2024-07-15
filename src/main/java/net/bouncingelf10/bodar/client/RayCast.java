@@ -75,25 +75,28 @@ public class RayCast {
                     spawnParticle(new Vec3d((float) blockHitResult.getPos().x, (float) blockHitResult.getPos().y, (float) blockHitResult.getPos().z), blockHitResult.getSide());
                     break;
                 case ENTITY:
-                    EntityHitResult entityHitResult = (EntityHitResult) hit;
-                    Entity entity = entityHitResult.getEntity();
-                    //LOGGER.info("Hit entity: {}, type: {}", entity, entityHitResult.getType());
+                    if (config.renderEntitiesWithColor) {
+                        EntityHitResult entityHitResult = (EntityHitResult) hit;
+                        Entity entity = entityHitResult.getEntity();
+                        //LOGGER.info("Hit entity: {}, type: {}", entity, entityHitResult.getType());
 
-                    if (entity instanceof Monster) {
-                        //LOGGER.info("The entity is hostile.");
-                        getBlockID("minecraft:entityhostile");
-                    } else if (entity instanceof PassiveEntity) {
-                        //LOGGER.info("The entity is passive.");
-                        getBlockID("minecraft:entitypassive");
-                    } else {
-                        //LOGGER.info("The entity is of another type.");
-                        getBlockID("minecraft:entitymisc");
+                        if (entity instanceof Monster) {
+                            //LOGGER.info("The entity is hostile.");
+                            getBlockID("minecraft:entityhostile");
+                        } else if (entity instanceof PassiveEntity) {
+                            //LOGGER.info("The entity is passive.");
+                            getBlockID("minecraft:entitypassive");
+                        } else {
+                            //LOGGER.info("The entity is of another type.");
+                            getBlockID("minecraft:entitymisc");
+                        }
+
+                        Vec3d hitPos = entityHitResult.getPos();
+                        Direction hitDirection = getEntityHitDirection(hitPos, entityHitResult.getEntity());
+                        setDirection(hitDirection);
+                        spawnParticle(new Vec3d((float) hitPos.x, (float) hitPos.y, (float) hitPos.z), hitDirection);
+                        break;
                     }
-
-                    Vec3d hitPos = entityHitResult.getPos();
-                    Direction hitDirection = getEntityHitDirection(hitPos, entityHitResult.getEntity());
-                    setDirection(hitDirection);
-                    spawnParticle(new Vec3d((float) hitPos.x, (float) hitPos.y, (float) hitPos.z), hitDirection);
                     break;
             }
         }

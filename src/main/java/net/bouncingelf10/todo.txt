@@ -8,6 +8,10 @@ PERFORMANCE IMPROVEMENTS
 
 F3 keybinding to clear all particles
 
+emmisive paritcles
+
+RENDER ENTIEIES AS color or nah
+
 All 3 dimension testing
 
 
