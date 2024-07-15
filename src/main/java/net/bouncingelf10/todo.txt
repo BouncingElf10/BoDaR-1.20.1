@@ -6,9 +6,6 @@ increase particle count  --not possible
 
 PERFORMANCE IMPROVEMENTS
 
-toggleable black / invis textures for blocks
-
-
 ================ Multiplayer
 
 client 1 cant see client 2 particles
