@@ -6,7 +6,18 @@ increase particle count  --not possible
 
 PERFORMANCE IMPROVEMENTS
 
-toggleable black / invis textures for blocks
+F3 keybinding to clear all particles
+
+All 3 dimension testing
+
+
+================ Multiplayer
+
+client 1 cant see client 2 particles
+
+fix colors
+
+================
 
 
 ================ Multiplayer

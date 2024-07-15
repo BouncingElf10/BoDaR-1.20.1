@@ -10,8 +10,8 @@ import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ModKeyBindings {
-    public static final Logger LOGGER = LoggerFactory.getLogger(ModKeyBindings.class);
+public class BoDaRKeyBindings {
+    public static final Logger LOGGER = LoggerFactory.getLogger(BoDaRKeyBindings.class);
 
     public static KeyBinding RKeyBinding;
 

@@ -5,7 +5,6 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.AutoConfig;
 
-
 @Config(name = "bodar")
 public class BoDaRConfig implements ConfigData {
 
@@ -13,13 +12,13 @@ public class BoDaRConfig implements ConfigData {
     public boolean isOn = true;
 
     @ConfigEntry.Gui.Tooltip
+    public boolean invisibleWorldMode = true;
+
+    @ConfigEntry.Gui.Tooltip
     public double size = 5.0;
 
     @ConfigEntry.Gui.Tooltip
-    public double density = 1.0;
-
-    @ConfigEntry.Gui.Tooltip
-    public double randomness = 1.0;
+    public double density = 2.0;
 
     @ConfigEntry.Gui.Tooltip
     public int reach = 24;
@@ -39,6 +38,13 @@ public class BoDaRConfig implements ConfigData {
 
     @ConfigEntry.Gui.Tooltip
     public float particleSize = 0.02f;
+
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.ColorPicker
+    public int skyboxColor = 0x000000; // Default to black
+
+    @ConfigEntry.Gui.Tooltip
+    public boolean renderEntitiesWithColor = true; // Default to black
 
     public enum ColorMode {
         DEFAULT,

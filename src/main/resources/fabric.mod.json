@@ -25,7 +25,7 @@
 			"net.bouncingelf10.bodar.init.BoDaRDataGenerator"
 		],
 		"modmenu": [
-			"net.bouncingelf10.bodar.init.ModMenuIntegration"
+			"net.bouncingelf10.bodar.init.BoDaRMenuIntegration"
 		]
 	},
 	"mixins": [
