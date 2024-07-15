@@ -19,7 +19,7 @@ public class ParticleManagerMixin {
             cancellable = true
     )
     private void onAddParticle(ParticleEffect parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ, CallbackInfoReturnable ci) {
-        if (BoDaRConfig.get().invisibleWorldMode && BoDaRConfig.get().isOn){
+        if (!BoDaRConfig.get().invisibleWorldMode && BoDaRConfig.get().isOn){
             ParticleType<?> particleType = parameters.getType();
 
             if (particleType != BoDaR.WhiteDotParticle) {
