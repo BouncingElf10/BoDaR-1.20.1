@@ -19,6 +19,15 @@ fix colors
 
 ================
 
+
+================ Multiplayer
+
+client 1 cant see client 2 particles
+
+fix colors
+
+================
+
 ------------------------- bugs ------------------------------------
 
 fading particles makes the particles behind it inviable

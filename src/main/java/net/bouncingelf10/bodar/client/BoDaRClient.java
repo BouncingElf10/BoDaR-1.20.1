@@ -1,6 +1,7 @@
 package net.bouncingelf10.bodar.client;
 
 import net.bouncingelf10.bodar.BoDaR;
+import net.bouncingelf10.bodar.networking.BoDaRPackets;
 import net.bouncingelf10.bodar.config.BoDaRConfig;
 import net.bouncingelf10.bodar.init.BoDaRKeyBindings;
 import net.fabricmc.api.ClientModInitializer;
@@ -20,9 +21,10 @@ public class BoDaRClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
 
-        LOGGER.info("Initializing client");
-        BoDaRKeyBindings.registerKeyBindings();
-        LOGGER.info("Keybind(s) Initialised");
+        LOGGER.info("Initializing client: Registering Keybindings and S2CPackets");
+        ModKeyBindings.registerKeyBindings();
+
+        BoDaRPackets.registerS2CPackets();
 
         BoDaRConfig config = BoDaRConfig.get();
             ClientTickEvents.END_CLIENT_TICK.register(client -> {
