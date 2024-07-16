@@ -15,6 +15,9 @@ public class BoDaRConfig implements ConfigData {
     public boolean invisibleWorldMode = true;
 
     @ConfigEntry.Gui.Tooltip
+    public boolean multiplayerMode = true;
+
+    @ConfigEntry.Gui.Tooltip
     public double size = 5.0;
 
     @ConfigEntry.Gui.Tooltip
@@ -30,7 +33,7 @@ public class BoDaRConfig implements ConfigData {
     public boolean doubleSided = true;
 
     @ConfigEntry.Gui.Tooltip
-    public int maxAge = 400;
+    public int maxAge = 800;
 
     @ConfigEntry.Gui.RequiresRestart
     @ConfigEntry.Gui.Tooltip

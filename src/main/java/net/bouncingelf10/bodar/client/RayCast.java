@@ -230,16 +230,17 @@ public class RayCast {
             getBlockID(colorID);
             setDirection(direction);
             world.addParticle(BoDaR.WhiteDotParticle, displacedPos.x, displacedPos.y, displacedPos.z, 0, 0, 0);
+            if (config.multiplayerMode) {
+                PacketByteBuf buf = PacketByteBufs.create();
 
-            PacketByteBuf buf = PacketByteBufs.create();
+                buf.writeDouble(displacedPos.x);
+                buf.writeDouble(displacedPos.y);
+                buf.writeDouble(displacedPos.z);
+                buf.writeInt(direction.getId());
+                buf.writeString(colorID);
 
-            buf.writeDouble(displacedPos.x);
-            buf.writeDouble(displacedPos.y);
-            buf.writeDouble(displacedPos.z);
-            buf.writeInt(direction.getId());
-            buf.writeString(colorID);
-
-            ClientPlayNetworking.send(BoDaRPackets.BODAR_PACKET_ID, buf);
+                ClientPlayNetworking.send(BoDaRPackets.BODAR_PACKET_ID, buf);
+            }
         } else {
             //LOGGER.warn("Cannot spawn particle: world is null");
         }
