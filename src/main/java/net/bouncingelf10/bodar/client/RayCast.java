@@ -12,6 +12,7 @@ import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.registry.Registries;
@@ -27,6 +28,7 @@ import org.joml.Vector3f;
 
 import java.util.Optional;
 
+import static net.bouncingelf10.bodar.BoDaR.BEEP_SOUND_EVENT;
 import static net.bouncingelf10.bodar.BoDaR.LOGGER;
 import static net.bouncingelf10.bodar.client.WhiteDotParticle.*;
 import static net.bouncingelf10.bodar.client.WhiteDotParticle.Factory.setDirection;
@@ -74,6 +76,14 @@ public class RayCast {
                     BlockState blockState = client.world.getBlockState(blockHitResult.getBlockPos());
                     Block block = blockState.getBlock();
                     Identifier blockId = Registries.BLOCK.getId(block);
+
+                    float pitch = (float) (0.950 + (Math.random() * (1.050 - 0.950)));
+                    float volume = (float) ((config.reach - Math.sqrt(blockHitResult.squaredDistanceTo(client.player))) / config.reach * 0.1);
+
+                    LOGGER.info(String.valueOf(volume));
+                    if (Math.random() > 0.9) {
+                        world.playSound(client.player, client.player.getBlockPos(), BEEP_SOUND_EVENT, SoundCategory.BLOCKS, volume, pitch);
+                    }
 
                     spawnParticle(new Vec3d((float) blockHitResult.getPos().x, (float) blockHitResult.getPos().y, (float) blockHitResult.getPos().z), blockHitResult.getSide(), String.valueOf(blockId));
                     break;
