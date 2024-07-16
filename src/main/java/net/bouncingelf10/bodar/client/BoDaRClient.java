@@ -22,7 +22,7 @@ public class BoDaRClient implements ClientModInitializer {
     public void onInitializeClient() {
 
         LOGGER.info("Initializing client: Registering Keybindings and S2CPackets");
-        ModKeyBindings.registerKeyBindings();
+        BoDaRKeyBindings.registerKeyBindings();
 
         BoDaRPackets.registerS2CPackets();
 
