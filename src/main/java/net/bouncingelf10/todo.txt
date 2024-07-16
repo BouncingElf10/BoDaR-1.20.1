@@ -7,13 +7,10 @@ increase particle count  --not possible
 PERFORMANCE IMPROVEMENTS
 
 All 3 dimension testing
-================ Multiplayer
 
-client 1 cant see client 2 particles
+add volume contraltos
 
-fix colors
-
-================
+music
 
 
 ================ Multiplayer

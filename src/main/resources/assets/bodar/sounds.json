@@ -1,0 +1,12 @@
+{
+  "beep": {
+    "sounds": [
+      "bodar:beep"
+    ]
+  },
+  "wave": {
+    "sounds": [
+      "bodar:wave"
+    ]
+  }
+}
