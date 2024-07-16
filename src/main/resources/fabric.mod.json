@@ -9,7 +9,7 @@
 	],
 	"contact": {
 		"homepage": "https://github.com/BouncingElf10/BoDaR-1.20.1",
-		"sources": "https://github.com/BouncingElf10/BoDaR-1.20.1"
+		"issues": "https://github.com/BouncingElf10/BoDaR-1.20.1/issues"
 	},
 	"license": "CC-BY-NC-4.0",
 	"icon": "assets/bodar/icon.png",
@@ -36,7 +36,7 @@
 		"minecraft": "~1.20.1",
 		"java": ">=17",
 		"fabric-api": "*",
-		"modmenu": ">=7.0.0"
+		"cloth-config": ">=11.0.0"
 	},
 	"suggests": {
 		"another-mod": "*"
