@@ -78,11 +78,10 @@ public class RayCast {
                     Identifier blockId = Registries.BLOCK.getId(block);
 
                     float pitch = (float) (0.950 + (Math.random() * (1.050 - 0.950)));
-                    float volume = (float) ((config.reach - Math.sqrt(blockHitResult.squaredDistanceTo(client.player))) / config.reach * 0.1);
+                    float volume = (float) ((config.reach - Math.sqrt(blockHitResult.squaredDistanceTo(client.player))) / config.reach * 0.1 * ((double) config.soundVolume / 100));
 
-                    LOGGER.info(String.valueOf(volume));
-                    if (Math.random() > 0.9) {
-                        world.playSound(client.player, client.player.getBlockPos(), BEEP_SOUND_EVENT, SoundCategory.BLOCKS, volume, pitch);
+                    if (Math.random() > 0.9 && config.playSound) {
+                        world.playSound(client.player, client.player.getBlockPos(), BEEP_SOUND_EVENT, SoundCategory.MASTER, volume, pitch);
                     }
 
                     spawnParticle(new Vec3d((float) blockHitResult.getPos().x, (float) blockHitResult.getPos().y, (float) blockHitResult.getPos().z), blockHitResult.getSide(), String.valueOf(blockId));

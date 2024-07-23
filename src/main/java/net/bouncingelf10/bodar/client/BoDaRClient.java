@@ -33,18 +33,25 @@ public class BoDaRClient implements ClientModInitializer {
         BoDaRConfig config = BoDaRConfig.get();
             ClientTickEvents.END_CLIENT_TICK.register(client -> {
                 if (BoDaRKeyBindings.RKeyBinding.isPressed()) {
+
+                    var size = config.size;
+                    double density = (2 * size) / Math.ceil((2 * size) / (-0.06875 * (config.density - 20) + 6));
+                    double randomness = density / 2;
+
+
                     if (config.isOn && currentSound[0] == null) {
                         LOGGER.info("R pressed");
                         loadBlocks();
                         resetColors();
                         //LOGGER.info("Screen Resolution: {}, {}", window.getWidth(), window.getHeight());
+                        if (config.playSound) {
+                            currentSound[0] = new PositionedSoundInstance(BoDaR.WAVE_SOUND_EVENT.getId(), SoundCategory.MASTER,
+                                    (float) config.soundVolume / 100, 1.0F,
+                                    SoundInstance.createRandom(), true, 0, SoundInstance.AttenuationType.NONE, 0.0, 0.0, 0.0, true);
+                            MinecraftClient.getInstance().getSoundManager().play(currentSound[0]);
+                        }
 
-                        currentSound[0] = new PositionedSoundInstance(BoDaR.WAVE_SOUND_EVENT.getId(), SoundCategory.AMBIENT, 1F, 1.0F, SoundInstance.createRandom(), true, 0, SoundInstance.AttenuationType.NONE, 0.0, 0.0, 0.0, true);
-                        MinecraftClient.getInstance().getSoundManager().play(currentSound[0]);
 
-                        var size = config.size;
-                        var density = config.density;
-                        var randomness = config.density / 2;
                         for (double i = size * -1; i <= size; i = i + density) {
                             for (double j = size * -1; j <= size; j = j + density) {
                                 float xOffset = (float) (j + (Math.random() * 2 - 1) * randomness);
@@ -58,10 +65,6 @@ public class BoDaRClient implements ClientModInitializer {
                         loadBlocks();
                         resetColors();
                         //LOGGER.info("Screen Resolution: {}, {}", window.getWidth(), window.getHeight());
-
-                        var size = config.size;
-                        var density = config.density;
-                        var randomness = config.density / 2;
                         for (double i = size * -1; i <= size; i = i + density) {
                             for (double j = size * -1; j <= size; j = j + density) {
                                 float xOffset = (float) (j + (Math.random() * 2 - 1) * randomness);
@@ -75,7 +78,6 @@ public class BoDaRClient implements ClientModInitializer {
                     if (currentSound[0] != null) {
                         MinecraftClient.getInstance().getSoundManager().stop(currentSound[0]);
                         currentSound[0] = null;
-                        LOGGER.info("R released, sound stopped");
                     }
                 }
             });

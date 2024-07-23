@@ -11,6 +11,9 @@
   "text.autoconfig.bodar.option.invisibleWorldMode": "Render World",
   "text.autoconfig.bodar.option.invisibleWorldMode.@Tooltip": "If we render the world or not",
 
+  "text.autoconfig.bodar.option.multiplayerMode": "Multiplayer Mode",
+  "text.autoconfig.bodar.option.multiplayerMode.@Tooltip": "If off, it wont send any packets to the server",
+
   "text.autoconfig.bodar.option.size": "Size",
   "text.autoconfig.bodar.option.size.@Tooltip": "How big the area is of the BoDaR beam",
 
@@ -27,13 +30,24 @@
   "text.autoconfig.bodar.option.doubleSided.@Tooltip": "If particles are double sided (may increase performance)",
 
   "text.autoconfig.bodar.option.maxAge": "Max Age",
-  "text.autoconfig.bodar.option.maxAge.@Tooltip": "Maximum age of of the particles",
+  "text.autoconfig.bodar.option.maxAge.@Tooltip": "Maximum age of of the particles (In Sec)",
 
   "text.autoconfig.bodar.option.fadeOutTime": "Fade out Time",
-  "text.autoconfig.bodar.option.fadeOutTime.@Tooltip": "Time it takes for particles to fade out after being broken",
+  "text.autoconfig.bodar.option.fadeOutTime.@Tooltip": "Time it takes for particles to fade out after being broken (In Sec)",
 
   "text.autoconfig.bodar.option.particleSize": "Particle Size",
   "text.autoconfig.bodar.option.particleSize.@Tooltip": "How big the particles are",
+
+  "text.autoconfig.bodar.option.playSound": "Mute",
+  "text.autoconfig.bodar.option.playSound.@Tooltip": "Mute all sounds",
+
+  "text.autoconfig.bodar.option.soundVolume": "Volume",
+
+  "text.autoconfig.bodar.option.skyboxColor": "Void Color",
+  "text.autoconfig.bodar.option.skyboxColor.@Tooltip": "What color to show when not rendering the world.",
+
+  "text.autoconfig.bodar.option.renderEntitiesWithColor": "Render entities",
+  "text.autoconfig.bodar.option.renderEntitiesWithColor.@Tooltip": "If particles show up on entities or not",
 
   "text.autoconfig.bodar.option.particleColorMode": "Particle Color Mode",
   "text.autoconfig.bodar.option.particleColorMode.@Tooltip[0]": "Choose how particle colors are determined",
@@ -51,5 +65,9 @@
   "text.autoconfig.bodar.option.ores.@Tooltip": "What block is considered a \"Ore\"",
 
   "text.autoconfig.bodar.option.functionals": "Functional Blocks",
-  "text.autoconfig.bodar.option.functionals.@Tooltip": "What block is considered a \"Functional Block\""
+  "text.autoconfig.bodar.option.functionals.@Tooltip": "What block is considered a \"Functional Block\"",
+
+  "text.autoconfig.bodar.category.rendering": "Rendering",
+  "text.autoconfig.bodar.category.color": "Color",
+  "text.autoconfig.bodar.category.sound": "Sound"
 }

@@ -156,7 +156,7 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
     protected WhiteDotParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Direction direction, BlockPos blockPos, Entity hitEntity, Vec3d hitPos, int blockColor) {
         super(world, x, y, z, velocityX, velocityY, velocityZ);
         this.scale = config.particleSize;
-        this.maxAge = config.maxAge;
+        this.maxAge = config.maxAge * 20;
         this.setVelocity(velocityX, velocityY, velocityZ);
         this.rotation = getRotationQuaternion(direction);
 
@@ -256,8 +256,8 @@ public class WhiteDotParticle extends SpriteBillboardParticle {
 
     private final int randomRotation = random.nextInt(360);
 
-    private static final int ENTITY_FADE_DURATION = config.fadeOutTime * 6; // 3 seconds at 20 TPS
-    private static final int BLOCK_FADE_DURATION = config.fadeOutTime; // 1 second at 20 TPS
+    private static final int ENTITY_FADE_DURATION = config.fadeOutTime * 20 * 6; // 3 seconds at 20 TPS
+    private static final int BLOCK_FADE_DURATION = config.fadeOutTime * 20; // 1 second at 20 TPS
     private int fadeDuration;
     private int fadeStartAge;
     private boolean isFading;
