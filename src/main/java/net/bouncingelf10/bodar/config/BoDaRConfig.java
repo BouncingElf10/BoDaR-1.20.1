@@ -8,65 +8,84 @@ import me.shedaniel.autoconfig.AutoConfig;
 @Config(name = "bodar")
 public class BoDaRConfig implements ConfigData {
 
+    @ConfigEntry.Category("rendering")
     @ConfigEntry.Gui.Tooltip
     public boolean isOn = true;
 
+    @ConfigEntry.Category("rendering")
     @ConfigEntry.Gui.Tooltip
     public boolean invisibleWorldMode = true;
 
+    @ConfigEntry.Category("rendering")
     @ConfigEntry.Gui.Tooltip
     public boolean multiplayerMode = true;
 
+    @ConfigEntry.Category("rendering")
     @ConfigEntry.Gui.Tooltip
-    public double size = 5.0;
+    @ConfigEntry.BoundedDiscrete(min = 2, max = 6)
+    public int size = 5;
 
+    @ConfigEntry.Category("rendering")
     @ConfigEntry.Gui.Tooltip
-    public double density = 2.0;
+    @ConfigEntry.BoundedDiscrete(min = 20, max = 100)
+    public int density = 60;
 
+    @ConfigEntry.Category("rendering")
     @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.BoundedDiscrete(min = 12, max = 64)
     public int reach = 24;
 
+    @ConfigEntry.Category("rendering")
     @ConfigEntry.Gui.Tooltip
     public boolean randomRotation = true;
 
+    @ConfigEntry.Category("rendering")
     @ConfigEntry.Gui.Tooltip
     public boolean doubleSided = true;
 
+    @ConfigEntry.Category("rendering")
     @ConfigEntry.Gui.Tooltip
-    public int maxAge = 800;
+    public int maxAge = 20;
 
+    @ConfigEntry.Category("rendering")
     @ConfigEntry.Gui.RequiresRestart
     @ConfigEntry.Gui.Tooltip
-    public int fadeOutTime = 20;
+    public int fadeOutTime = 1;
 
+    @ConfigEntry.Category("rendering")
     @ConfigEntry.Gui.Tooltip
     public float particleSize = 0.02f;
 
+    @ConfigEntry.Category("color")
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.ColorPicker
     public int skyboxColor = 0x000000; // Default to black
 
+    @ConfigEntry.Category("color")
     @ConfigEntry.Gui.Tooltip
-    public boolean renderEntitiesWithColor = true; // Default to black
+    public boolean renderEntitiesWithColor = true;
 
     public enum ColorMode {
         DEFAULT,
         MIXED,
         WORLD
     }
-
+    @ConfigEntry.Category("color")
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     @ConfigEntry.Gui.Tooltip(count = 4)
     public ColorMode particleColorMode = ColorMode.DEFAULT;
 
+    @ConfigEntry.Category("color")
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.ColorPicker
     public int oreColor = 119935;
 
+    @ConfigEntry.Category("color")
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.ColorPicker
     public int functionalColor = 11112511;
 
+    @ConfigEntry.Category("color")
     @ConfigEntry.Gui.Tooltip
     public String[] ores = {
             "minecraft:coal_ore",
@@ -89,6 +108,7 @@ public class BoDaRConfig implements ConfigData {
             "minecraft:deepslate_copper_ore"
     };
 
+    @ConfigEntry.Category("color")
     @ConfigEntry.Gui.Tooltip
     public String[] functionals = {
             "minecraft:furnace",
@@ -116,6 +136,13 @@ public class BoDaRConfig implements ConfigData {
             "minecraft:ladder"
     };
 
+    @ConfigEntry.Category("sound")
+    @ConfigEntry.Gui.Tooltip
+    public boolean playSound = true;
+
+    @ConfigEntry.Category("sound")
+    @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
+    public int soundVolume = 100;
 
     public static BoDaRConfig get() {
         return AutoConfig.getConfigHolder(BoDaRConfig.class).getConfig();
