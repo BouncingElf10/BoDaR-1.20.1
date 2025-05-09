@@ -1,1 +1,1 @@
-Just an mc mod im working on to test my java skills, will change this if im actually serious in posting this.
+abandoned mc mod i was working on, do with this as you please
